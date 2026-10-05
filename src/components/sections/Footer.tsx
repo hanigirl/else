@@ -84,25 +84,27 @@ export function Footer() {
   return (
     <footer className="page-container">
       {/* Figma: 4 link columns from the right, logo on the far left */}
-      <div className="flex flex-wrap items-start justify-between gap-y-12 pt-[clamp(56px,5.4vw,104px)]">
+      {/* Mobile: logo + tagline as one brand block on top, links in a 2×2 grid */}
+      <div className="flex flex-wrap items-start justify-between gap-y-12 pt-[clamp(56px,5.4vw,104px)] max-md:grid max-md:grid-cols-2 max-md:gap-x-6 max-md:gap-y-10">
         {columns.map((c) => (
-          <nav key={c.title} aria-label={c.title} className="flex flex-col gap-[19px] max-md:basis-1/2">
+          <nav key={c.title} aria-label={c.title} className="flex flex-col gap-[19px] max-md:gap-4">
             <h3 className="type-caption-strong">{c.title}</h3>
-            <ul className={`type-caption flex flex-col ${c.gap}`}>
+            <ul className={`type-caption flex flex-col ${c.gap} max-md:gap-3`}>
               {c.items.map((item, i) => (
                 <li key={i}>{item}</li>
               ))}
             </ul>
           </nav>
         ))}
-        <div className="max-md:order-first max-md:basis-full">
+        <div className="max-md:order-first max-md:col-span-full max-md:flex max-md:flex-col max-md:items-start max-md:gap-4">
           <Logo variant="brand" />
+          <p lang="en" dir="ltr" className="type-tagline text-ink text-right md:hidden">AI can make anything. We make something else</p>
         </div>
       </div>
 
       {/* Bottom line — tagline left, legal right (Figma physical sides) */}
-      <div dir="ltr" className="flex flex-wrap items-center justify-between gap-4 pt-[clamp(40px,3.65vw,70px)] pb-[clamp(40px,3.8vw,73px)]">
-        <p lang="en" className="type-tagline text-ink">AI can make anything. We make something else</p>
+      <div dir="ltr" className="flex flex-wrap items-center justify-between gap-4 pt-[clamp(40px,3.65vw,70px)] pb-[clamp(40px,3.8vw,73px)] max-md:mt-12 max-md:justify-end max-md:border-t max-md:border-ink/15 max-md:pt-6 max-md:pb-8">
+        <p lang="en" className="type-tagline text-ink max-md:hidden">AI can make anything. We make something else</p>
         <p dir="rtl" className="type-micro flex items-center gap-1">
           <span>חני בוסקילה</span>
           <span aria-hidden className="size-[3px] rounded-full bg-ink" />
