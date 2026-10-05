@@ -200,23 +200,71 @@
   .shape-star__ray:nth-child(1) { --a: 0deg;   --rest: 0.36;   --op: 0.9; }  /* →  fixed */
   .shape-star__ray:nth-child(2) { --a: 45deg;  --rest: 0.341;  --op: 0.85; } /* ↘  fixed */
   .shape-star__ray:nth-child(3) { --a: 90deg;  --rest: 0.226;  --op: 0.65; } /* ↓  fixed */
-  .shape-star__ray:nth-child(4) { --a: 135deg; --rest: 0.2;    --op: 0.55; --q: 2; } /* ↙  moves 3rd */
+  .shape-star__ray:nth-child(4) { --a: 135deg; --rest: 0.2;    --op: 0.55; } /* ↙  moves 3rd */
   .shape-star__ray:nth-child(5) { --a: 180deg; --rest: 0.179;  --op: 0.5; }  /* ←  fixed */
-  .shape-star__ray:nth-child(6) { --a: 225deg; --rest: 0.206;  --op: 0.55; --q: 3; } /* ↖  moves 4th */
-  .shape-star__ray:nth-child(7) { --a: 270deg; --rest: 0.261;  --op: 0.65; --q: 0; } /* ↑  moves 1st */
-  .shape-star__ray:nth-child(8) { --a: 315deg; --rest: 0.335;  --op: 0.8;  --q: 1; } /* ↗  moves 2nd */
+  .shape-star__ray:nth-child(6) { --a: 225deg; --rest: 0.206;  --op: 0.55; } /* ↖  moves 4th */
+  .shape-star__ray:nth-child(7) { --a: 270deg; --rest: 0.261;  --op: 0.65; } /* ↑  moves 1st */
+  .shape-star__ray:nth-child(8) { --a: 315deg; --rest: 0.335;  --op: 0.8;  } /* ↗  moves 2nd */
 
-  /* the four moving rays: a 4-step loop, each starting at its turn (--q) */
-  .shape-star__ray:is(:nth-child(4), :nth-child(6), :nth-child(7), :nth-child(8)) {
-    animation: star-ray calc(var(--star-step) * 4) var(--star-ease) infinite;
-    animation-delay: calc(var(--star-step) * (var(--q) - 4));
+  /* Each step one of the four moving rays (↑ ↗ ↙ ↖, clockwise from the top)
+     reaches out to --star-reach (0.405), and the opposite end of the same line
+     shortens by the same amount — the line slides through the hub, keeping
+     its length, so the star's proportions always add up. → and ← never move.
+     4-step loop; each state holds 60% of a step, slides during the other 40%.
+     Lengths are generated from the resting pose above — change --rest values
+     there together with these keyframes. */
+  .shape-star__ray:is(:nth-child(2), :nth-child(3), :nth-child(4), :nth-child(6), :nth-child(7), :nth-child(8)) {
+    animation-duration: calc(var(--star-step) * 4);
+    animation-timing-function: var(--star-ease);
+    animation-iteration-count: infinite;
   }
-  /* reach out → hold (60% of a step) → back to its resting length; grows
-     again in the last 40% of the loop. 0.81 = --star-reach (40.5%) × 2 */
-  @keyframes star-ray {
+  .shape-star__ray:nth-child(2) { animation-name: star-ray-2; }
+  .shape-star__ray:nth-child(3) { animation-name: star-ray-3; }
+  .shape-star__ray:nth-child(4) { animation-name: star-ray-4; }
+  .shape-star__ray:nth-child(6) { animation-name: star-ray-6; }
+  .shape-star__ray:nth-child(7) { animation-name: star-ray-7; }
+  .shape-star__ray:nth-child(8) { animation-name: star-ray-8; }
+  @keyframes star-ray-2 { /* ↘ */
+    0%, 15% { scale: 0.682 1; opacity: 0.85; }
+    25%, 40% { scale: 0.682 1; opacity: 0.85; }
+    50%, 65% { scale: 0.682 1; opacity: 0.85; }
+    75%, 90% { scale: 0.284 1; opacity: 0.85; }
+    100% { scale: 0.682 1; opacity: 0.85; }
+  }
+  @keyframes star-ray-3 { /* ↓ */
+    0%, 15% { scale: 0.164 1; opacity: 0.65; }
+    25%, 40% { scale: 0.452 1; opacity: 0.65; }
+    50%, 65% { scale: 0.452 1; opacity: 0.65; }
+    75%, 90% { scale: 0.452 1; opacity: 0.65; }
+    100% { scale: 0.164 1; opacity: 0.65; }
+  }
+  @keyframes star-ray-4 { /* ↙ */
+    0%, 15% { scale: 0.4 1; opacity: 0.55; }
+    25%, 40% { scale: 0.26 1; opacity: 0.55; }
+    50%, 65% { scale: 0.81 1; opacity: 1; }
+    75%, 90% { scale: 0.4 1; opacity: 0.55; }
+    100% { scale: 0.4 1; opacity: 0.55; }
+  }
+  @keyframes star-ray-6 { /* ↖ */
+    0%, 15% { scale: 0.412 1; opacity: 0.55; }
+    25%, 40% { scale: 0.412 1; opacity: 0.55; }
+    50%, 65% { scale: 0.412 1; opacity: 0.55; }
+    75%, 90% { scale: 0.81 1; opacity: 1; }
+    100% { scale: 0.412 1; opacity: 0.55; }
+  }
+  @keyframes star-ray-7 { /* ↑ */
     0%, 15% { scale: 0.81 1; opacity: 1; }
-    25%, 90% { scale: calc(var(--rest) * 2) 1; opacity: var(--op); }
+    25%, 40% { scale: 0.522 1; opacity: 0.65; }
+    50%, 65% { scale: 0.522 1; opacity: 0.65; }
+    75%, 90% { scale: 0.522 1; opacity: 0.65; }
     100% { scale: 0.81 1; opacity: 1; }
+  }
+  @keyframes star-ray-8 { /* ↗ */
+    0%, 15% { scale: 0.67 1; opacity: 0.8; }
+    25%, 40% { scale: 0.81 1; opacity: 1; }
+    50%, 65% { scale: 0.26 1; opacity: 0.8; }
+    75%, 90% { scale: 0.67 1; opacity: 0.8; }
+    100% { scale: 0.67 1; opacity: 0.8; }
   }
 
   /* ---------- Labels at the moving ray's tip ----------
