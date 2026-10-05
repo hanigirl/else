@@ -16,9 +16,9 @@ export function Hero() {
       ].filter(Boolean).join(" ")}
     >
       {/* Top bar — physical sides as in Figma: logo left, signature right */}
-      {/* Mobile: just the logo, 10% smaller and centred */}
-      <div className="page-container flex items-start justify-between pt-[clamp(24px,4.17vw,80px)] max-md:justify-center" dir="ltr">
-        <Logo className="max-md:h-[25.83px]" />
+      {/* Mobile: just the logo, smaller, centred, 40px from the top */}
+      <div className="page-container flex items-start justify-between pt-[clamp(24px,4.17vw,80px)] max-md:justify-center max-md:pt-10" dir="ltr">
+        <Logo className="max-md:h-[22px]" />
         <div className="relative flex flex-col items-end max-md:hidden">
           <SignatureLabel>hani.buskila</SignatureLabel>
           <span lang="en" className="type-label absolute right-0 top-[calc(100%+13.5px)] font-medium [writing-mode:vertical-rl]">
