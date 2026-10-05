@@ -1,4 +1,5 @@
 import { useId, type ReactNode, type Ref } from "react";
+import { asset } from "@/lib/asset";
 
 /* ---------- Logo ---------- */
 
@@ -6,12 +7,12 @@ import { useId, type ReactNode, type Ref } from "react";
 export function Logo({ variant = "light", className }: { variant?: "light" | "brand"; className?: string }) {
   if (variant === "brand") {
     // eslint-disable-next-line @next/next/no-img-element
-    return <img src="/assets/logo-full.svg" alt="else" width={212} height={58} className={className} />;
+    return <img src={asset("/assets/logo-full.svg")} alt="else" width={212} height={58} className={className} />;
   }
   return (
     <span dir="ltr" lang="en" className={["inline-flex items-center gap-[7.1px] text-white", className].filter(Boolean).join(" ")}>
       {/* eslint-disable-next-line @next/next/no-img-element */}
-      <img src="/assets/logo-mark.svg" alt="" width={28.5} height={28.7} />
+      <img src={asset("/assets/logo-mark.svg")} alt="" width={28.5} height={28.7} />
       <span className="type-logo">else</span>
     </span>
   );

@@ -4,6 +4,7 @@
 import { useEffect, useRef, type CSSProperties } from "react";
 import { PORTRAIT, portraitPixels, type Pixel } from "@/content/portraitPixels";
 import { cluster, hoverTrail, pixel, wave } from "@/lib/pixelBurst";
+import { asset } from "@/lib/asset";
 
 /** one grid cell of the indigo pixels, in Figma px */
 const CELL = 40.5;
@@ -167,7 +168,7 @@ export function Portrait({ className }: { className?: string }) {
       }}
     >
       <img
-        src="/assets/hani-portrait.webp"
+        src={asset("/assets/hani-portrait.webp")}
         alt="חני בוסקילה"
         width={688}
         height={878}

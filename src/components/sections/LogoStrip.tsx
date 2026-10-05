@@ -1,4 +1,5 @@
 import type { CSSProperties } from "react";
+import { asset } from "@/lib/asset";
 
 /**
  * Section 3 — the client / partner logo strip, as an endless marquee sliding
@@ -35,7 +36,7 @@ function Row({ hidden }: { hidden?: boolean }) {
             aria-label={hidden ? undefined : l.alt}
             className="logo-mark"
             style={{
-              "--logo": `url(/assets/logos/${l.file})`,
+              "--logo": `url(${asset(`/assets/logos/${l.file}`)})`,
               width: `calc(${l.w * SIZE} * var(--logo-unit))`,
               aspectRatio: l.ratio,
             } as CSSProperties}

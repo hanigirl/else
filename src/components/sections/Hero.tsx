@@ -1,6 +1,7 @@
 /* eslint-disable @next/next/no-img-element */
 import { BlurStar } from "@/components/Shape";
 import { Logo, SignatureLabel } from "@/components/ui";
+import { asset } from "@/lib/asset";
 
 /** TEST: the shape wall's dot grid behind the hero — right side only, slanted fade. false = off */
 const DOT_GRID = true;
@@ -51,12 +52,12 @@ export function Hero() {
       <div className="page-container relative h-[105px]" dir="ltr">
         <div aria-hidden className="absolute bottom-[73px] left-[var(--page-margin)] h-[84px] w-[74px]">
           <div className="absolute left-0 top-[8px] flex h-[76px] w-0 items-center justify-center">
-            <img src="/assets/arrow-line-v.svg" alt="" width={76} height={2} className="max-w-none rotate-90" />
+            <img src={asset("/assets/arrow-line-v.svg")} alt="" width={76} height={2} className="max-w-none rotate-90" />
           </div>
           <div className="absolute left-[0.82px] top-0 flex h-[82.52px] w-[73.185px] items-center justify-center">
-            <img src="/assets/arrow-line-diag.svg" alt="" width={110.298} height={2} className="max-w-none rotate-[131.57deg]" />
+            <img src={asset("/assets/arrow-line-diag.svg")} alt="" width={110.298} height={2} className="max-w-none rotate-[131.57deg]" />
           </div>
-          <img src="/assets/arrow-line-h.svg" alt="" width={69} height={2} className="absolute left-0 top-[82px] max-w-none" />
+          <img src={asset("/assets/arrow-line-h.svg")} alt="" width={69} height={2} className="absolute left-0 top-[82px] max-w-none" />
         </div>
       </div>
     </section>
