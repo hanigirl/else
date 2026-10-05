@@ -62,7 +62,9 @@ export function PixelWord({ text, className }: { text: string; className?: strin
   useEffect(() => {
     const el = root.current;
     if (!grid || !el) return;
-    const ray = el.closest(".shape-star")?.querySelector(".shape-star__ray")?.getAnimations()[0];
+    // only the moving rays animate — take the clock from the first one that does
+    const rays = el.closest(".shape-star")?.querySelectorAll(".shape-star__ray") ?? [];
+    const ray = [...rays].map((r) => r.getAnimations()[0]).find(Boolean);
     if (ray?.startTime == null) return;
     el.querySelectorAll("i").forEach((px) => px.getAnimations().forEach((a) => { a.startTime = ray.startTime; }));
   }, [grid]);

@@ -145,26 +145,26 @@
   }
 
   /* ---------- Blurred star (the hero mark) ----------
-     8 rays from one hub, fixed angles — the star never turns. The "tail"
-     (longest, brightest ray) passes clockwise to the next ray every
-     --star-step; the others take their lengths relative to it.
-     Optional labels sit at the tail's tip and swap with it.
-     Lengths are fractions of --star-size (box; hub in its centre), measured
-     from the reference poses.
+     8 rays from one hub, resting in the original Figma pose (long right,
+     down-right and down). The pose never changes: only four rays move — up,
+     up-right, down-left, up-left — one at a time, clockwise from the top.
+     The moving ray reaches out to --star-reach with a word, then returns.
+     8 words cycle through the 4 moving rays (each carries two per lap).
+     Lengths are shares of --star-size (box; hub in its centre).
      Knobs (set on .shape-star): --star-size, --star-step, --star-ease,
      --star-thickness, --star-color, --star-opacity, --star-blur (ratio of size),
-     --star-label-gap, --star-write. */
+     --star-reach, --star-label-gap, --star-write. */
   .shape-star {
     --star-size: 948px;
     --star-color: var(--color-white);
     --star-opacity: 0.6;
     --star-blur: 0.0125;          /* Figma blur 23.6 ≈ CSS blur 11.8px */
     --star-thickness: 0.07;
-    --star-step: 1.7s;            /* was 2s — 15% faster */
+    --star-step: 1.7s;            /* time each moving ray holds the word */
     --star-ease: cubic-bezier(0.65, 0, 0.35, 1);
-    --star-reach: 40.5%;            /* how far the long ray reaches from the hub (share of the box; 50% = edge) */
+    --star-reach: 40.5%;          /* how far a moving ray reaches (share of the box; 50% = edge) */
     --star-label-gap: 2.5%;
-    --star-write: 0.6s;           /* time to write a word, pixel by pixel (was 0.7s) */
+    --star-write: 0.6s;           /* time to write a word, pixel by pixel */
 
     position: relative;
     width: var(--star-size);
@@ -192,38 +192,37 @@
     translate: 0 -50%;
     transform-origin: calc(var(--t) / 2) 50%;
     rotate: var(--a);
-    animation: star-ray calc(var(--star-step) * 8) var(--star-ease) infinite;
-    animation-delay: calc(var(--star-step) * (var(--i) - 8));
+    /* resting pose: each ray's own length (--rest, share of the box) and brightness */
+    scale: calc(var(--rest) * 2) 1;
+    opacity: var(--op);
   }
-  .shape-star__ray:nth-child(1) { --i: 0; --a: 0deg; }
-  .shape-star__ray:nth-child(2) { --i: 1; --a: 45deg; }
-  .shape-star__ray:nth-child(3) { --i: 2; --a: 90deg; }
-  .shape-star__ray:nth-child(4) { --i: 3; --a: 135deg; }
-  .shape-star__ray:nth-child(5) { --i: 4; --a: 180deg; }
-  .shape-star__ray:nth-child(6) { --i: 5; --a: 225deg; }
-  .shape-star__ray:nth-child(7) { --i: 6; --a: 270deg; }
-  .shape-star__ray:nth-child(8) { --i: 7; --a: 315deg; }
+  /* the Figma pose, clockwise from the right */
+  .shape-star__ray:nth-child(1) { --a: 0deg;   --rest: 0.36;   --op: 0.9; }  /* →  fixed */
+  .shape-star__ray:nth-child(2) { --a: 45deg;  --rest: 0.341;  --op: 0.85; } /* ↘  fixed */
+  .shape-star__ray:nth-child(3) { --a: 90deg;  --rest: 0.226;  --op: 0.65; } /* ↓  fixed */
+  .shape-star__ray:nth-child(4) { --a: 135deg; --rest: 0.2;    --op: 0.55; --q: 2; } /* ↙  moves 3rd */
+  .shape-star__ray:nth-child(5) { --a: 180deg; --rest: 0.179;  --op: 0.5; }  /* ←  fixed */
+  .shape-star__ray:nth-child(6) { --a: 225deg; --rest: 0.206;  --op: 0.55; --q: 3; } /* ↖  moves 4th */
+  .shape-star__ray:nth-child(7) { --a: 270deg; --rest: 0.261;  --op: 0.65; --q: 0; } /* ↑  moves 1st */
+  .shape-star__ray:nth-child(8) { --a: 315deg; --rest: 0.335;  --op: 0.8;  --q: 1; } /* ↗  moves 2nd */
 
-  /* Length profile around the long ray (share of the box): 0.405 long ray (= --star-reach),
-     0.36 its neighbours, tapering to 0.21 opposite — the long ray must read as
-     clearly the longest, since the word sits on it.
-     ray 0's 8 steps: tail → then each step the tail is one ray further clockwise.
-     Holds 60% of a step, grows/shrinks during the other 40%. */
+  /* the four moving rays: a 4-step loop, each starting at its turn (--q) */
+  .shape-star__ray:is(:nth-child(4), :nth-child(6), :nth-child(7), :nth-child(8)) {
+    animation: star-ray calc(var(--star-step) * 4) var(--star-ease) infinite;
+    animation-delay: calc(var(--star-step) * (var(--q) - 4));
+  }
+  /* reach out → hold (60% of a step) → back to its resting length; grows
+     again in the last 40% of the loop. 0.81 = --star-reach (40.5%) × 2 */
   @keyframes star-ray {
-    0.00%, 7.50% { scale: 0.810 1; opacity: 1; }
-    12.50%, 20.00% { scale: 0.720 1; opacity: 0.72; }
-    25.00%, 32.50% { scale: 0.580 1; opacity: 0.58; }
-    37.50%, 45.00% { scale: 0.460 1; opacity: 0.42; }
-    50.00%, 57.50% { scale: 0.420 1; opacity: 0.36; }
-    62.50%, 70.00% { scale: 0.460 1; opacity: 0.42; }
-    75.00%, 82.50% { scale: 0.540 1; opacity: 0.55; }
-    87.50%, 95.00% { scale: 0.720 1; opacity: 0.72; }
-    100% { scale: 0.810 1; opacity: 1; }
+    0%, 15% { scale: 0.81 1; opacity: 1; }
+    25%, 90% { scale: calc(var(--rest) * 2) 1; opacity: var(--op); }
+    100% { scale: 0.81 1; opacity: 1; }
   }
 
-  /* ---------- Labels at the tail's tip ----------
-     One per ray, placed just past its tip and pushed outward (--dx/--dy = the
-     ray's direction), so the text always grows away from the star. */
+  /* ---------- Labels at the moving ray's tip ----------
+     8 words, one per step of the 8-step lap (--i). Word k sits on moving ray
+     k mod 4: ↑ ↗ ↙ ↖ ↑ ↗ ↙ ↖. Diagonal words are pushed outward along the ray
+     (--dx/--dy), so the text always grows away from the star. */
   .shape-star__label {
     position: absolute;
     left: calc(50% + (var(--star-reach) + var(--star-label-gap)) * var(--dx));
@@ -231,28 +230,29 @@
     transform: translate(calc(-50% + 50% * var(--dx)), calc(-50% + 50% * var(--dy)));
     white-space: nowrap;
   }
-  .shape-star__label:nth-child(1) { --i: 0; --dx: 1.0; --dy: 0.0; }
-  .shape-star__label:nth-child(2) { --i: 1; --dx: 0.707; --dy: 0.707; }
-  .shape-star__label:nth-child(3) { --i: 2; --dx: 0.0; --dy: 1.0; }
-  .shape-star__label:nth-child(4) { --i: 3; --dx: -0.707; --dy: 0.707; }
-  .shape-star__label:nth-child(5) { --i: 4; --dx: -1.0; --dy: 0.0; }
-  .shape-star__label:nth-child(6) { --i: 5; --dx: -0.707; --dy: -0.707; }
-  .shape-star__label:nth-child(7) { --i: 6; --dx: -0.0; --dy: -1.0; }
-  .shape-star__label:nth-child(8) { --i: 7; --dx: 0.707; --dy: -0.707; }
-
-  /* Straight rays: tuck the word alongside the tip instead of past it,
-     so it never lands on the headline or the bottom divider. */
-  .shape-star__label:nth-child(1) { left: calc(50% + var(--star-reach)); top: calc(50% + var(--star-thickness) * 50% + 1%); transform: translate(-100%, 0); }   /* →  under the tip */
-  .shape-star__label:nth-child(5) { left: calc(50% - var(--star-reach));   top: calc(50% + var(--star-thickness) * 50% + 1%); transform: none; }               /* ←  under the tip */
-  .shape-star__label:nth-child(3) { left: calc(50% + var(--star-thickness) * 50% + 1.5%); top: calc(50% + var(--star-reach)); transform: translate(0, -100%); } /* ↓  beside the tip */
-  .shape-star__label:nth-child(7) { left: calc(50% + var(--star-thickness) * 50% + 1.5%); top: calc(50% - var(--star-reach)); transform: none; }               /* ↑  beside the tip */
+  .shape-star__label:nth-child(1) { --i: 0; }
+  .shape-star__label:nth-child(2) { --i: 1; }
+  .shape-star__label:nth-child(3) { --i: 2; }
+  .shape-star__label:nth-child(4) { --i: 3; }
+  .shape-star__label:nth-child(5) { --i: 4; }
+  .shape-star__label:nth-child(6) { --i: 5; }
+  .shape-star__label:nth-child(7) { --i: 6; }
+  .shape-star__label:nth-child(8) { --i: 7; }
+  .shape-star__label:is(:nth-child(2), :nth-child(6)) { --dx: 0.707; --dy: -0.707; }  /* ↗ */
+  .shape-star__label:is(:nth-child(3), :nth-child(7)) { --dx: -0.707; --dy: 0.707; }  /* ↙ */
+  .shape-star__label:is(:nth-child(4), :nth-child(8)) { --dx: -0.707; --dy: -0.707; } /* ↖ */
+  /* ↑ straight up: tuck the word beside the tip instead of past it */
+  .shape-star__label:is(:nth-child(1), :nth-child(5)) {
+    left: calc(50% + var(--star-thickness) * 50% + 1.5%);
+    top: calc(50% - var(--star-reach));
+    transform: none;
+  }
 
   /* Narrow screens: diagonal words tuck back toward the star so they stay on screen */
   @media (max-width: 767px) {
-    .shape-star__label:nth-child(2) { transform: translate(-100%, 0); }      /* ↘ */
-    .shape-star__label:nth-child(4) { transform: translate(0, 0); }          /* ↙ */
-    .shape-star__label:nth-child(6) { transform: translate(0, -100%); }      /* ↖ */
-    .shape-star__label:nth-child(8) { transform: translate(-100%, -100%); }  /* ↗ */
+    .shape-star__label:is(:nth-child(2), :nth-child(6)) { transform: translate(-100%, -100%); } /* ↗ */
+    .shape-star__label:is(:nth-child(3), :nth-child(7)) { transform: translate(0, 0); }         /* ↙ */
+    .shape-star__label:is(:nth-child(4), :nth-child(8)) { transform: translate(0, -100%); }     /* ↖ */
   }
 
   /* Written pixel by pixel while its ray is the tail, column by column, then
@@ -272,7 +272,7 @@
     95.01%, 100% { opacity: 1; }
   }
 
-  /* Paused / reduced motion = the logo pose, first word fully written */
+  /* Paused / reduced motion = the resting pose with the up ray out, first word written */
   .shape-star.is-static :is(.shape-star__ray, .pixel-word > i) { animation-play-state: paused; }
   .shape-star.is-static .shape-star__label:first-child .pixel-word > i { animation: none; opacity: 1; }
 

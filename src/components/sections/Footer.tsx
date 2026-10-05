@@ -96,9 +96,9 @@ export function Footer() {
             </ul>
           </nav>
         ))}
-        <div className="max-md:order-first max-md:col-span-full max-md:flex max-md:flex-col max-md:items-start max-md:gap-4">
+        <div className="max-md:order-first max-md:col-span-full max-md:flex max-md:flex-col max-md:items-end max-md:gap-4">
           <Logo variant="brand" />
-          <p lang="en" dir="ltr" className="type-tagline text-ink text-right md:hidden">AI can make anything. We make something else</p>
+          <p lang="en" dir="ltr" className="type-tagline text-ink text-left md:hidden">AI can make anything. We make something else</p>
         </div>
       </div>
 
