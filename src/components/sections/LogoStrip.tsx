@@ -52,7 +52,7 @@ export function LogoStrip() {
     <section
       aria-label="עבדתי עם"
       dir="ltr" /* the track overflows to the right and slides left — anchor it on the left */
-      className="logo-marquee [--logo-unit:0.5px] md:[--logo-unit:min(1px,100vw/1920)]"
+      className="logo-marquee [--logo-unit:0.75px] md:[--logo-unit:min(1px,100vw/1920)]"
       style={{ "--logo-gap": `calc(${GAP * SIZE} * var(--logo-unit))` } as CSSProperties}
     >
       {/* Figma: 128 top & bottom → 20% thinner */}
