@@ -38,7 +38,7 @@ export function Hero() {
 
           {/* Star hub = Figma's crossing point: −52 / +63 px from the headline centre (box 948 at 1920).
               The pixel word rides the tip of the long ray — one word per ray, clockwise from the right */}
-          <div className="pointer-events-none absolute left-1/2 top-1/2 translate-x-[-50%] translate-y-[26%] md:translate-x-[-55.5%] md:translate-y-[-43.4%]">
+          <div className="pointer-events-none absolute left-1/2 top-1/2 max-md:hidden translate-x-[-50%] translate-y-[26%] md:translate-x-[-55.5%] md:translate-y-[-43.4%]">
             <BlurStar
               className="[--star-size:58vw] md:[--star-size:clamp(420px,49.4vw,948px)]"
               labels={["build", "think product", "decide", "validate", "own", "sell", "present", "learn"]}
