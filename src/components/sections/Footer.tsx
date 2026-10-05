@@ -85,7 +85,7 @@ export function Footer() {
     <footer className="page-container">
       {/* Figma: 4 link columns from the right, logo on the far left */}
       {/* Mobile: logo + tagline as one brand block on top, links in a 2×2 grid */}
-      <div className="flex flex-wrap items-start justify-between gap-y-12 pt-[clamp(56px,5.4vw,104px)] max-md:grid max-md:grid-cols-2 max-md:gap-x-6 max-md:gap-y-10">
+      <div className="flex flex-wrap items-start justify-between gap-y-12 pt-[clamp(56px,5.4vw,104px)] max-md:grid max-md:grid-cols-2 max-md:gap-x-12 max-md:gap-y-10">
         {columns.map((c) => (
           <nav key={c.title} aria-label={c.title} className="flex flex-col gap-[19px] max-md:gap-4">
             <h3 className="type-caption-strong">{c.title}</h3>

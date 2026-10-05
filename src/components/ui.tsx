@@ -204,7 +204,7 @@ export function Checkbox({
 }) {
   const id = useId();
   return (
-    <div className="flex flex-col gap-1.5">
+    <div className="relative">
       <label className="type-small inline-flex items-center gap-1.5">
         <input
           ref={inputRef}
@@ -222,7 +222,8 @@ export function Checkbox({
         </span>
       </label>
       {error && (
-        <p id={id} role="alert" className="type-small field-error">
+        /* hangs under the box without pushing the layout down, so nothing jumps when it clears */
+        <p id={id} role="alert" className="type-small field-error absolute top-full mt-1.5">
           {error}
         </p>
       )}

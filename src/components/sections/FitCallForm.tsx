@@ -86,7 +86,13 @@ export function FitCallForm() {
         <Checkbox
           inputRef={refs.consent}
           required
-          label="אני מאשר/ת שיחזרו אליי לתיאום השיחה, ולקבל מ-else עדכונים במייל ובהודעות."
+          label={
+            <>
+              <span className="max-md:hidden">אני מאשר/ת שיחזרו אליי לתיאום השיחה, ולקבל מ-else עדכונים במייל ובהודעות.</span>
+              {/* phones: a shorter line that fits one row */}
+              <span className="text-[12px] md:hidden">אני מאשר/ת שיחזרו אליי ולקבל עדכונים מ-else</span>
+            </>
+          }
           error={errors.consent}
           onChange={(checked) => checked && setErrors((cur) => ({ ...cur, consent: undefined }))}
         />
