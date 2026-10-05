@@ -90,7 +90,7 @@ export function FitCallForm() {
           error={errors.consent}
           onChange={(checked) => checked && setErrors((cur) => ({ ...cur, consent: undefined }))}
         />
-        <Button type="submit">שליחת טופס</Button>
+        <Button type="submit" className="max-md:w-full max-md:justify-center">שליחת טופס</Button>
       </div>
     </form>
   );
