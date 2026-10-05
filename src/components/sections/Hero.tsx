@@ -1,6 +1,6 @@
 /* eslint-disable @next/next/no-img-element */
 import { BlurStar } from "@/components/Shape";
-import { Logo, SignatureLabel } from "@/components/ui";
+import { Logo } from "@/components/ui";
 import { asset } from "@/lib/asset";
 
 /** TEST: the shape wall's dot grid behind the hero — right side only, slanted fade. false = off */
@@ -15,19 +15,16 @@ export function Hero() {
         DOT_GRID && "surface-dots surface-dots--right",
       ].filter(Boolean).join(" ")}
     >
-      {/* Top bar — physical sides as in Figma: logo left, signature right */}
+      {/* Top bar — physical sides as in Figma: logo left, year right */}
       {/* Mobile: just the logo, smaller, centred, 40px from the top */}
       <div className="page-container flex items-start justify-between pt-[clamp(24px,4.17vw,80px)] max-md:justify-center max-md:pt-10" dir="ltr">
         <div className="flex flex-col items-start gap-2 max-md:items-center">
           <Logo className="max-md:h-[22px]" />
           <span lang="en" className="type-label text-[14px] text-white max-md:text-[12px]">by Hani Buskila</span>
         </div>
-        <div className="relative flex flex-col items-end max-md:hidden">
-          <SignatureLabel>hani.buskila</SignatureLabel>
-          <span lang="en" className="type-label absolute right-0 top-[calc(100%+13.5px)] font-medium [writing-mode:vertical-rl]">
-            2026
-          </span>
-        </div>
+        <span lang="en" className="type-label font-medium text-white [writing-mode:vertical-rl] max-md:hidden">
+          2026
+        </span>
       </div>
 
       <div className="flex-1" />
