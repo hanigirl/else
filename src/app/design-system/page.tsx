@@ -14,7 +14,7 @@ const colors: { group: string; items: { token: string; hex: string; use: string;
     group: "מותג",
     items: [
       { token: "indigo", hex: "#5651ED", use: "קישורים ופעולות בלבד, פיקסלים" },
-      { token: "brand-blue", hex: "#284CDE", use: "לוגו בפוטר" },
+      { token: "brand-blue", hex: "#1341E9", use: "צבע הלוגו (פוטר)" },
       { token: "navy", hex: "#1A237E", use: "רקע כחול — התחלה" },
       { token: "cobalt", hex: "#4A7AF7", use: "רקע כחול — סוף" },
     ],

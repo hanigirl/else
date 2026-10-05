@@ -1,20 +1,21 @@
-import { useId, type ReactNode, type Ref } from "react";
+import { useId, type CSSProperties, type ReactNode, type Ref } from "react";
 import { asset } from "@/lib/asset";
 
 /* ---------- Logo ---------- */
 
-/** "light" = white mark + Clash wordmark (on blue). "brand" = full blue lockup (footer). */
+/**
+ * The else logo (public/assets/logo.svg), used as a mask so one file serves
+ * both colours: "light" = white (on blue, header), "brand" = brand blue (footer).
+ * Sized by height; 38.2px = the artwork's own size, the site uses 28.7px.
+ */
 export function Logo({ variant = "light", className }: { variant?: "light" | "brand"; className?: string }) {
-  if (variant === "brand") {
-    // eslint-disable-next-line @next/next/no-img-element
-    return <img src={asset("/assets/logo-full.svg")} alt="else" width={212} height={58} className={className} />;
-  }
   return (
-    <span dir="ltr" lang="en" className={["inline-flex items-center gap-[7.1px] text-white", className].filter(Boolean).join(" ")}>
-      {/* eslint-disable-next-line @next/next/no-img-element */}
-      <img src={asset("/assets/logo-mark.svg")} alt="" width={28.5} height={28.7} />
-      <span className="type-logo">else</span>
-    </span>
+    <span
+      role="img"
+      aria-label="else"
+      className={["logo", variant === "brand" ? "text-brand-blue" : "text-white", className].filter(Boolean).join(" ")}
+      style={{ "--logo": `url(${asset("/assets/logo.svg")})` } as CSSProperties}
+    />
   );
 }
 

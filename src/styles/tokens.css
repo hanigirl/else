@@ -34,7 +34,7 @@
 @theme static {
   /* ---------- Colour: brand ---------- */
   --color-indigo: #5651ed;        /* primary — links & actions only (never plain text), pixels */
-  --color-brand-blue: #284cde;    /* footer wordmark */
+  --color-brand-blue: #1341e9;    /* the logo's blue (footer logo) */
   --color-navy: #1a237e;          /* blue surface, start */
   --color-cobalt: #4a7af7;        /* blue surface, end */
 

@@ -96,8 +96,7 @@ export function Footer() {
           </nav>
         ))}
         <div className="max-md:order-first max-md:basis-full">
-          {/* same size as the header logo: the star mark is 28.7px tall in both */}
-          <Logo variant="brand" className="h-[28.7px] w-auto" />
+          <Logo variant="brand" />
         </div>
       </div>
 

@@ -36,4 +36,16 @@
     outline: 2px solid var(--color-indigo);
     outline-offset: 2px;
   }
+
+  /* ---------- Logo (ui.tsx) ----------
+     The logo file as a mask, filled with the current text colour.
+     Default height 28.7px (star 28.7px tall); set height to resize. */
+  .logo {
+    display: inline-block;
+    height: 28.7px;
+    aspect-ratio: 140.3 / 38.2;
+    background-color: currentColor;
+    -webkit-mask: var(--logo) center / contain no-repeat;
+    mask: var(--logo) center / contain no-repeat;
+  }
 }
