@@ -1,0 +1,466 @@
+/* ==========================================================================
+   else — shapes
+   Pure CSS. Every shape is controlled by custom properties, so you can play
+   with it inline:  <div class="shape shape--triangle" style="--shape-color: var(--color-rose); --shape-rotate: 90deg">
+   Transitions are already on, so changing a variable later (hover, scroll,
+   JS) animates for free — that's the hook for the interaction layer.
+   ========================================================================== */
+
+@layer components {
+  /* ---------- Base ---------- */
+  .shape {
+    --shape-w: 130px;
+    --shape-h: 130px;
+    --shape-color: var(--color-indigo);
+    --shape-rotate: 0deg;
+    --shape-scale-x: 1;
+    --shape-scale-y: 1;
+    --shape-radius: 0;
+    --shape-clip: none;
+
+    display: block;
+    width: var(--shape-w);
+    height: var(--shape-h);
+    background-color: var(--shape-color);
+    border-radius: var(--shape-radius);
+    clip-path: var(--shape-clip);
+    transform: rotate(var(--shape-rotate)) scale(var(--shape-scale-x), var(--shape-scale-y));
+    transition:
+      transform var(--dur-base) var(--ease-out),
+      background-color var(--dur-base) var(--ease-out),
+      border-radius var(--dur-base) var(--ease-out),
+      clip-path var(--dur-base) var(--ease-out),
+      width var(--dur-base) var(--ease-out),
+      height var(--dur-base) var(--ease-out);
+  }
+
+  /* ---------- Rectangle ---------- */
+  .shape--rect {
+    /* the default — nothing to add */
+  }
+
+  /* ---------- Circle / ellipse ---------- */
+  .shape--circle {
+    --shape-radius: 50%;
+  }
+
+  /* ---------- Right triangle ----------
+     Default: right angle in the bottom-right corner (as in Figma).
+     Flip it with --shape-rotate (90 / 180 / 270deg) or swap --shape-clip. */
+  .shape--triangle {
+    --shape-clip: polygon(100% 0, 0 100%, 100% 100%);
+  }
+  .shape--triangle.is-corner-bl { --shape-clip: polygon(0 0, 0 100%, 100% 100%); }
+  .shape--triangle.is-corner-tl { --shape-clip: polygon(0 0, 100% 0, 0 100%); }
+  .shape--triangle.is-corner-tr { --shape-clip: polygon(0 0, 100% 0, 100% 100%); }
+
+  /* ---------- Drop (3 round corners + 1 square) with optional hole ----------
+     --drop-corner: which corner stays square. --hole-*: the punched ellipse.
+     Set --hole-w: 0 to remove the hole. */
+  .shape--drop {
+    --shape-radius: 50% 50% 50% 0; /* TL TR BR BL — bottom-left square */
+    --hole-w: 16.8%;
+    --hole-h: 15.2%;
+    --hole-x: 50%;
+    --hole-y: 49.3%;
+
+    -webkit-mask: radial-gradient(var(--hole-w) var(--hole-h) at var(--hole-x) var(--hole-y), transparent 97%, #000 100%);
+    mask: radial-gradient(var(--hole-w) var(--hole-h) at var(--hole-x) var(--hole-y), transparent 97%, #000 100%);
+  }
+  .shape--drop.is-corner-tl { --shape-radius: 0 50% 50% 50%; }
+  .shape--drop.is-corner-tr { --shape-radius: 50% 0 50% 50%; }
+  .shape--drop.is-corner-br { --shape-radius: 50% 50% 0 50%; }
+
+  /* ---------- Bars (3 stripes with a gutter-sized gap) ----------
+     --bars-direction: column (horizontal stripes) | row (vertical stripes) */
+  .shape-bars {
+    --shape-w: 454px;
+    --shape-h: 454px;
+    --shape-color: var(--color-azure);
+    --bars-gap: var(--grid-gutter, 32px);
+    --bars-direction: column;
+
+    display: flex;
+    flex-direction: var(--bars-direction);
+    gap: var(--bars-gap);
+    width: var(--shape-w);
+    height: var(--shape-h);
+  }
+  .shape-bars > * {
+    flex: 1 1 0;
+    background-color: var(--shape-color);
+    transition:
+      flex-grow var(--dur-base) var(--ease-out),
+      background-color var(--dur-base) var(--ease-out),
+      transform var(--dur-base) var(--ease-out);
+  }
+
+  /* ---------- Steps (staircase) ----------
+     Each step is its own element; move one with --step-x on that child. */
+  .shape-steps {
+    --shape-color: var(--color-mustard);
+    --step-w: 216px;
+    --step-h: 148px;
+
+    display: flex;
+    flex-direction: column;
+    direction: ltr; /* offsets are measured from the left like in Figma */
+  }
+  .shape-steps > * {
+    --step-x: 0px;
+    width: var(--step-w);
+    height: var(--step-h);
+    margin-left: var(--step-x);
+    background-color: var(--shape-color);
+    transition:
+      margin-left var(--dur-base) var(--ease-out),
+      background-color var(--dur-base) var(--ease-out);
+  }
+  /* Figma offsets for the default 3-step stair */
+  .shape-steps > :nth-child(1) { --step-x: calc(var(--step-w) * 1.12); }
+  .shape-steps > :nth-child(2) { --step-x: calc(var(--step-w) * 0.62); }
+  .shape-steps > :nth-child(3) { --step-x: 0px; }
+
+  /* ---------- Pixels (the cluster over the portrait) ----------
+     A grid of square cells. Place each cell with --c / --r (column / row)
+     and stretch it with --cs / --rs (span). */
+  .shape-pixels {
+    --shape-color: var(--color-indigo);
+    --pixel: 40px;
+    --pixel-cols: 8;
+    --pixel-rows: 6;
+
+    display: grid;
+    grid-template-columns: repeat(var(--pixel-cols), var(--pixel));
+    grid-template-rows: repeat(var(--pixel-rows), var(--pixel));
+    direction: ltr;
+  }
+  .shape-pixels > * {
+    grid-column: var(--c, auto) / span var(--cs, 1);
+    grid-row: var(--r, auto) / span var(--rs, 1);
+    background-color: var(--shape-color);
+    transition:
+      transform var(--dur-fast) var(--ease-out),
+      opacity var(--dur-fast) var(--ease-out);
+  }
+
+  /* ---------- Blurred star (the hero mark) ----------
+     8 rays from one hub, fixed angles — the star never turns. The "tail"
+     (longest, brightest ray) passes clockwise to the next ray every
+     --star-step; the others take their lengths relative to it.
+     Optional labels sit at the tail's tip and swap with it.
+     Lengths are fractions of --star-size (box; hub in its centre), measured
+     from the reference poses.
+     Knobs (set on .shape-star): --star-size, --star-step, --star-ease,
+     --star-thickness, --star-color, --star-opacity, --star-blur (ratio of size),
+     --star-label-gap, --star-write. */
+  .shape-star {
+    --star-size: 948px;
+    --star-color: var(--color-white);
+    --star-opacity: 0.6;
+    --star-blur: 0.0125;          /* Figma blur 23.6 ≈ CSS blur 11.8px */
+    --star-thickness: 0.07;
+    --star-step: 1.7s;            /* was 2s — 15% faster */
+    --star-ease: cubic-bezier(0.65, 0, 0.35, 1);
+    --star-reach: 40.5%;            /* how far the long ray reaches from the hub (share of the box; 50% = edge) */
+    --star-label-gap: 2.5%;
+    --star-write: 0.6s;           /* time to write a word, pixel by pixel (was 0.7s) */
+
+    position: relative;
+    width: var(--star-size);
+    aspect-ratio: 1;
+    pointer-events: none;
+  }
+
+  /* The blurred, see-through layer (labels stay sharp outside it) */
+  .shape-star__glow {
+    position: absolute;
+    inset: 0;
+    opacity: var(--star-opacity);
+    filter: blur(calc(var(--star-size) * var(--star-blur)));
+  }
+
+  .shape-star__ray {
+    /* starts half a thickness behind the hub so the centre stays solid */
+    --t: calc(var(--star-thickness) * var(--star-size));
+    position: absolute;
+    top: 50%;
+    left: calc(50% - var(--t) / 2);
+    width: calc(var(--star-size) * 0.5 + var(--t) / 2);
+    height: var(--t);
+    background: var(--star-color);
+    translate: 0 -50%;
+    transform-origin: calc(var(--t) / 2) 50%;
+    rotate: var(--a);
+    animation: star-ray calc(var(--star-step) * 8) var(--star-ease) infinite;
+    animation-delay: calc(var(--star-step) * (var(--i) - 8));
+  }
+  .shape-star__ray:nth-child(1) { --i: 0; --a: 0deg; }
+  .shape-star__ray:nth-child(2) { --i: 1; --a: 45deg; }
+  .shape-star__ray:nth-child(3) { --i: 2; --a: 90deg; }
+  .shape-star__ray:nth-child(4) { --i: 3; --a: 135deg; }
+  .shape-star__ray:nth-child(5) { --i: 4; --a: 180deg; }
+  .shape-star__ray:nth-child(6) { --i: 5; --a: 225deg; }
+  .shape-star__ray:nth-child(7) { --i: 6; --a: 270deg; }
+  .shape-star__ray:nth-child(8) { --i: 7; --a: 315deg; }
+
+  /* Length profile around the long ray (share of the box): 0.405 long ray (= --star-reach),
+     0.36 its neighbours, tapering to 0.21 opposite — the long ray must read as
+     clearly the longest, since the word sits on it.
+     ray 0's 8 steps: tail → then each step the tail is one ray further clockwise.
+     Holds 60% of a step, grows/shrinks during the other 40%. */
+  @keyframes star-ray {
+    0.00%, 7.50% { scale: 0.810 1; opacity: 1; }
+    12.50%, 20.00% { scale: 0.720 1; opacity: 0.72; }
+    25.00%, 32.50% { scale: 0.580 1; opacity: 0.58; }
+    37.50%, 45.00% { scale: 0.460 1; opacity: 0.42; }
+    50.00%, 57.50% { scale: 0.420 1; opacity: 0.36; }
+    62.50%, 70.00% { scale: 0.460 1; opacity: 0.42; }
+    75.00%, 82.50% { scale: 0.540 1; opacity: 0.55; }
+    87.50%, 95.00% { scale: 0.720 1; opacity: 0.72; }
+    100% { scale: 0.810 1; opacity: 1; }
+  }
+
+  /* ---------- Labels at the tail's tip ----------
+     One per ray, placed just past its tip and pushed outward (--dx/--dy = the
+     ray's direction), so the text always grows away from the star. */
+  .shape-star__label {
+    position: absolute;
+    left: calc(50% + (var(--star-reach) + var(--star-label-gap)) * var(--dx));
+    top: calc(50% + (var(--star-reach) + var(--star-label-gap)) * var(--dy));
+    transform: translate(calc(-50% + 50% * var(--dx)), calc(-50% + 50% * var(--dy)));
+    white-space: nowrap;
+  }
+  .shape-star__label:nth-child(1) { --i: 0; --dx: 1.0; --dy: 0.0; }
+  .shape-star__label:nth-child(2) { --i: 1; --dx: 0.707; --dy: 0.707; }
+  .shape-star__label:nth-child(3) { --i: 2; --dx: 0.0; --dy: 1.0; }
+  .shape-star__label:nth-child(4) { --i: 3; --dx: -0.707; --dy: 0.707; }
+  .shape-star__label:nth-child(5) { --i: 4; --dx: -1.0; --dy: 0.0; }
+  .shape-star__label:nth-child(6) { --i: 5; --dx: -0.707; --dy: -0.707; }
+  .shape-star__label:nth-child(7) { --i: 6; --dx: -0.0; --dy: -1.0; }
+  .shape-star__label:nth-child(8) { --i: 7; --dx: 0.707; --dy: -0.707; }
+
+  /* Straight rays: tuck the word alongside the tip instead of past it,
+     so it never lands on the headline or the bottom divider. */
+  .shape-star__label:nth-child(1) { left: calc(50% + var(--star-reach)); top: calc(50% + var(--star-thickness) * 50% + 1%); transform: translate(-100%, 0); }   /* →  under the tip */
+  .shape-star__label:nth-child(5) { left: calc(50% - var(--star-reach));   top: calc(50% + var(--star-thickness) * 50% + 1%); transform: none; }               /* ←  under the tip */
+  .shape-star__label:nth-child(3) { left: calc(50% + var(--star-thickness) * 50% + 1.5%); top: calc(50% + var(--star-reach)); transform: translate(0, -100%); } /* ↓  beside the tip */
+  .shape-star__label:nth-child(7) { left: calc(50% + var(--star-thickness) * 50% + 1.5%); top: calc(50% - var(--star-reach)); transform: none; }               /* ↑  beside the tip */
+
+  /* Narrow screens: diagonal words tuck back toward the star so they stay on screen */
+  @media (max-width: 767px) {
+    .shape-star__label:nth-child(2) { transform: translate(-100%, 0); }      /* ↘ */
+    .shape-star__label:nth-child(4) { transform: translate(0, 0); }          /* ↙ */
+    .shape-star__label:nth-child(6) { transform: translate(0, -100%); }      /* ↖ */
+    .shape-star__label:nth-child(8) { transform: translate(-100%, -100%); }  /* ↗ */
+  }
+
+  /* Written pixel by pixel while its ray is the tail, column by column, then
+     wiped in the same order as the ray shrinks. Each pixel's own delay is its
+     place in the word (--d, 0→1) × --star-write. */
+  .shape-star__label .pixel-word > i {
+    opacity: 0;
+    animation: star-pixel calc(var(--star-step) * 8) steps(1, end) infinite;
+    animation-delay: calc(var(--star-step) * (var(--i) - 8) + var(--d) * var(--star-write));
+  }
+  /* on while its ray is long: writes in as the ray grows (last 5% of the
+     cycle = the grow), wipes out as it shrinks (from 7.5%) — so the word
+     always sits on the longest ray, and words cross over with the rays */
+  @keyframes star-pixel {
+    0% { opacity: 1; }
+    7.5%, 95% { opacity: 0; }
+    95.01%, 100% { opacity: 1; }
+  }
+
+  /* Paused / reduced motion = the logo pose, first word fully written */
+  .shape-star.is-static :is(.shape-star__ray, .pixel-word > i) { animation-play-state: paused; }
+  .shape-star.is-static .shape-star__label:first-child .pixel-word > i { animation: none; opacity: 1; }
+
+  @media (prefers-reduced-motion: reduce) {
+    :is(.shape-star__ray, .shape-star__label .pixel-word > i) { animation-play-state: paused; }
+    .shape-star__label:first-child .pixel-word > i { animation: none; opacity: 1; }
+  }
+
+  /* ---------- Pixel word ----------
+     A word as real square pixels (PixelWord.tsx). 1 font pixel = 1/10 em,
+     so set font-size to size it: 24px → 2.4px pixels. */
+  .pixel-word {
+    --px: calc(1em / 10);
+    position: relative;
+    display: block;
+    width: calc(var(--cols, 0) * var(--px));
+    height: calc(var(--rows, 9) * var(--px));
+  }
+  .pixel-word > i {
+    position: absolute;
+    left: calc(var(--x) * var(--px));
+    top: calc(var(--y) * var(--px));
+    width: var(--px);
+    height: var(--px);
+    background: currentColor;
+  }
+
+  /* ---------- Shape wall: paint mode ----------
+     Each shape rests as a grid of faint squares and gets painted from the
+     top down as it scrolls by (ShapeMosaic mode="paint"). The shape's own
+     outline — clip-path, radius, hole mask — cuts every square, so the paint
+     always ends up as the true shape.
+     Knobs (on .shape-wall): --cell (set from CELL in ShapeMosaic.tsx),
+     --cell-ghost (resting squares), --cell-dot (dot size, share of a cell). */
+  .shape-wall {
+    --cell-ghost: var(--dot-opacity);
+    --cell-dot: 0.42;
+  }
+  .shape-wall.is-paint .shape {
+    position: absolute;
+    overflow: hidden;
+    background-color: transparent;
+  }
+  /* resting state: faint squares, gridded from the top-left like the paint */
+  .shape-wall.is-paint .shape::before {
+    content: "";
+    position: absolute;
+    inset: 0;
+    opacity: var(--cell-ghost);
+    background-image: url("data:image/svg+xml;utf8,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 100 100'><rect x='29' y='29' width='42' height='42' fill='white'/></svg>");
+    background-size: var(--cell) var(--cell);
+    background-position: left top;
+    pointer-events: none;
+  }
+  /* one column per cell, filled top-down by --rows (whole cells) */
+  .paint-col {
+    position: absolute;
+    top: 0;
+    left: calc(var(--i) * var(--cell));
+    width: calc(var(--cell) + 0.5px); /* hides hairline seams between columns */
+    height: calc(var(--rows, 999) * var(--cell));
+    background: var(--shape-color);
+  }
+  /* a stray pixel falling just below its column's paint */
+  .paint-spark {
+    position: absolute;
+    left: calc(var(--i) * var(--cell));
+    top: calc(var(--row, 0) * var(--cell));
+    width: var(--cell);
+    height: var(--cell);
+    background: var(--shape-color);
+    opacity: 0;
+  }
+
+  /* hover cluster (ShapeMosaic → burst): squares that pop in from the middle
+     out and switch off one by one. Sits under the paint columns. */
+  .paint-hover {
+    position: absolute;
+    inset: 0;
+    pointer-events: none;
+  }
+  .paint-reveal {
+    position: absolute;
+    inset: 0;
+    pointer-events: none;
+  }
+  /* the portrait's hover layer: same squares, in indigo, on the pixel grid */
+  .portrait-hover {
+    --cell: var(--pixel-cell);
+    --shape-color: var(--color-indigo);
+    position: absolute;
+    inset: 0;
+    overflow: hidden; /* clusters stay on the photo */
+    pointer-events: none;
+  }
+  .paint-hover > i,
+  .paint-reveal > i,
+  .portrait-hover > i {
+    position: absolute;
+    left: calc(var(--c) * var(--cell));
+    top: calc(var(--r) * var(--cell));
+    width: var(--cell);
+    height: var(--cell);
+    background: var(--pc, var(--shape-color));
+    animation: hover-pixel var(--life) steps(1, end) var(--delay) both;
+  }
+  /* off → on (after --delay) → stays → off at the end of --life */
+  @keyframes hover-pixel {
+    0% { opacity: 0; }
+    6%, 99.9% { opacity: 1; }
+    100% { opacity: 0; }
+  }
+
+  /* inverted: the square shows the section background at its exact spot
+     (the gradient spans the wall's full width) plus the resting dot */
+  .paint-reveal > i {
+    background-color: transparent;
+    background-image: linear-gradient(var(--surface-angle), var(--surface-from), var(--surface-to));
+    background-size: 100cqw 100%;
+    background-position: calc(-1 * (var(--sx) * var(--u) + var(--c) * var(--cell))) 0;
+  }
+  .paint-reveal > i::after {
+    content: "";
+    position: absolute;
+    inset: 0;
+    opacity: var(--cell-ghost);
+    background: url("data:image/svg+xml;utf8,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 100 100'><rect x='29' y='29' width='42' height='42' fill='white'/></svg>") center / 100% 100%;
+  }
+
+  /* ---------- Logo mark ----------
+     A single-colour SVG used as a mask: the logo takes `color` (default
+     --color-logo), so every client logo matches and can change on hover. */
+  .logo-mark {
+    display: block;
+    color: var(--color-logo);
+    background-color: currentColor;
+    -webkit-mask: var(--logo) center / contain no-repeat;
+    mask: var(--logo) center / contain no-repeat;
+    transition: color var(--dur-base) var(--ease-out);
+  }
+
+  /* ---------- Portrait pixels (Portrait.tsx) ----------
+     The indigo pixels on the photo's edges live: most hop one grid cell and
+     back (--hx/--hy, in cells), some blink, a few hold still. Jumps are
+     stepped — pixels never glide. */
+  @keyframes portrait-hop {
+    0%, 64% { translate: 0 0; }
+    66%, 84% { translate: calc(var(--hx) * var(--pixel-cell)) calc(var(--hy) * var(--pixel-cell)); }
+    86%, 100% { translate: 0 0; }
+  }
+  @keyframes portrait-blink {
+    0%, 72% { opacity: 1; }
+    74%, 86% { opacity: 0; }
+    88%, 100% { opacity: 1; }
+  }
+  @media (prefers-reduced-motion: reduce) {
+    .portrait-pixel { animation: none !important; }
+  }
+
+  /* ---------- Logo marquee (LogoStrip.tsx) ----------
+     Three identical rows side by side; the track slides left by one row's
+     width, then starts over — no visible jump. Edges fade out.
+     Knobs: --marquee-time (one full loop), --logo-gap. */
+  .logo-marquee {
+    --marquee-time: 38s;
+    overflow: hidden;
+    -webkit-mask: linear-gradient(90deg, transparent, #000 12%, #000 88%, transparent);
+    mask: linear-gradient(90deg, transparent, #000 12%, #000 88%, transparent);
+  }
+  .logo-marquee__track {
+    display: flex;
+    width: max-content;
+    animation: logo-marquee var(--marquee-time) linear infinite;
+  }
+  .logo-marquee:hover .logo-marquee__track {
+    animation-play-state: paused;
+  }
+  .logo-marquee__row {
+    display: flex;
+    flex-shrink: 0;
+    align-items: center;
+    gap: var(--logo-gap);
+    padding-right: var(--logo-gap); /* the gap between the last logo and the next row's first */
+  }
+  @keyframes logo-marquee {
+    to { translate: calc(-100% / 3) 0; } /* one row of three */
+  }
+  @media (prefers-reduced-motion: reduce) {
+    .logo-marquee__track { animation: none; }
+  }
+}

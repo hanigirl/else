@@ -1,0 +1,39 @@
+/* ==========================================================================
+   else — form controls
+   ========================================================================== */
+
+@layer components {
+  /* Checkbox — 16px, ink outline; picked = indigo fill + white check */
+  .checkbox {
+    appearance: none;
+    flex-shrink: 0;
+    width: 16px;
+    height: 16px;
+    border: 1px solid var(--color-ink);
+    border-radius: var(--radius-xs);
+    background: transparent center / 12px 12px no-repeat;
+    cursor: pointer;
+    transition:
+      background-color var(--dur-fast) var(--ease-out),
+      border-color var(--dur-fast) var(--ease-out);
+  }
+  .checkbox:hover {
+    background-color: var(--color-hover);
+  }
+  .checkbox:checked {
+    border-color: var(--color-indigo);
+    background-color: var(--color-indigo);
+    background-image: url("data:image/svg+xml;utf8,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 12 12'><path d='M2.5 6.2 5 8.6 9.6 3.6' fill='none' stroke='white' stroke-width='1.8' stroke-linecap='round' stroke-linejoin='round'/></svg>");
+  }
+  .checkbox[aria-invalid="true"] {
+    border-color: var(--color-error);
+  }
+  /* validation message under a field */
+  .field-error {
+    color: var(--color-error);
+  }
+  .checkbox:focus-visible {
+    outline: 2px solid var(--color-indigo);
+    outline-offset: 2px;
+  }
+}
