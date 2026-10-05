@@ -16,7 +16,7 @@ export function LearnSection() {
           <div className="col-start-3 col-span-6 max-w-[801px] max-xl:col-start-1 max-xl:col-span-full">
             <SectionHeading
               tone="dark"
-              title="ללמוד את המקצוע כמו שהוא נראה היום"
+              title="המקצוע השתנה."
               body="כש-AI מייצר מסכים בדקות, מעצבים נמדדים על ההחלטות שלהם, ונדרשים להיכנס לעולמות שפעם לא היו חלק מהתפקיד: מוצר, עסקים, מספרים, קוד ופרזנטציה."
             />
           </div>
