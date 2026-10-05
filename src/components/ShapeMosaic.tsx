@@ -96,10 +96,13 @@ function burst(shape: HTMLElement, col: number, row: number) {
 
 export function ShapeMosaic({
   shapes = shapeWall,
+  wall = WALL,
   mode = "solid",
   className,
 }: {
   shapes?: WallShape[];
+  /** the design canvas the shapes' coordinates live in */
+  wall?: { width: number; height: number };
   mode?: "solid" | "paint";
   className?: string;
 }) {
@@ -119,10 +122,11 @@ export function ShapeMosaic({
       frame = 0;
       const vh = window.innerHeight;
       const r = root.current!.getBoundingClientRect();
-      const scale = WALL.width / r.width; // screen px → design px
+      if (!r.width) return; // hidden at this breakpoint
+      const scale = wall.width / r.width; // screen px → design px
       // the front, in design px measured down from the wall's top edge
       const front = still.matches ? Infinity : (LINE * vh - r.top) * scale;
-      const done = front >= WALL.height + 2 * CELL;
+      const done = front >= wall.height + 2 * CELL;
 
       shapes.forEach((sh, si) => {
         const { rows, cols } = plans[si];
@@ -156,7 +160,7 @@ export function ShapeMosaic({
       window.removeEventListener("resize", request);
       still.removeEventListener("change", request);
     };
-  }, [mode, plans, shapes]);
+  }, [mode, plans, shapes, wall]);
 
   /* Hover: a little cluster of squares under the mouse. On the dotted part they
      light up in the shape's colour; on the painted part they punch through the
@@ -166,11 +170,11 @@ export function ShapeMosaic({
     const el = root.current;
     return hoverTrail(
       el,
-      () => (CELL * el.getBoundingClientRect().width) / WALL.width,
+      () => (CELL * el.getBoundingClientRect().width) / wall.width,
       (t) => t.closest<HTMLElement>("[data-shape]"),
       (col, row, shape) => burst(shape, col, row),
     );
-  }, [mode]);
+  }, [mode, wall]);
 
   return (
     <div
@@ -180,9 +184,9 @@ export function ShapeMosaic({
       style={{
         position: "relative",
         width: "100%",
-        aspectRatio: `${WALL.width} / ${WALL.height}`,
+        aspectRatio: `${wall.width} / ${wall.height}`,
         containerType: "inline-size",
-        ["--u" as string]: `calc(100cqw / ${WALL.width})`,
+        ["--u" as string]: `calc(100cqw / ${wall.width})`,
         ["--cell" as string]: `calc(${CELL} * var(--u))`,
       }}
     >

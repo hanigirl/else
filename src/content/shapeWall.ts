@@ -64,3 +64,17 @@ export const shapeWall: WallShape[] = [
   { id: "magenta-small", kind: "triangle", corner: "tl", x: 1460, y: 490, w: 244, h: 228, color: "magenta" },
   { id: "magenta-big", kind: "triangle", corner: "br", x: 1479, y: 527, w: 441, h: 411, color: "magenta" },
 ];
+
+/**
+ * Mobile (<768px): the same wall, two shapes a row instead of four.
+ * The two right-hand columns (x ≥ 970) move under the two left-hand ones,
+ * one gutter below them.
+ */
+const SPLIT_X = 970;
+const STACK_Y = 930 + 32; // bottom of the left half + gutter
+
+export const WALL_MOBILE = { width: 1920 - SPLIT_X, height: WALL.height + STACK_Y } as const;
+
+export const shapeWallMobile: WallShape[] = shapeWall.map((s) =>
+  s.x >= SPLIT_X ? { ...s, x: s.x - SPLIT_X, y: s.y + STACK_Y } : s,
+);

@@ -1,12 +1,14 @@
 import { ShapeMosaic } from "@/components/ShapeMosaic";
+import { WALL_MOBILE, shapeWallMobile } from "@/content/shapeWall";
 import { SectionHeading } from "@/components/ui";
 
 /** Section 2 — Figma 51:1001 "ללמוד את המקצוע כמו שהוא נראה היום" */
 export function LearnSection() {
   return (
     <section className="surface surface--blue overflow-hidden">
-      {/* Full-bleed wall, edge to edge like the frame */}
-      <ShapeMosaic mode="paint" />
+      {/* Full-bleed wall, edge to edge like the frame — four shapes a row, two on mobile */}
+      <ShapeMosaic mode="paint" className="max-md:hidden" />
+      <ShapeMosaic mode="paint" shapes={shapeWallMobile} wall={WALL_MOBILE} className="md:hidden" />
 
       {/* Figma: text block 801 wide, right edge on column 3, 87px under the wall, 247px bottom */}
       <div className="page-container pt-[clamp(40px,4.5vw,87px)] pb-[clamp(72px,12.9vw,247px)]">
