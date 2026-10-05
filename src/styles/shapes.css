@@ -163,7 +163,7 @@
     --star-step: 1.7s;            /* was 2s — 15% faster */
     --star-ease: cubic-bezier(0.65, 0, 0.35, 1);
     --star-reach: 0.405;          /* long ray's length from the hub, share of the box (0.5 = edge) */
-    --star-rest-scale: 1;         /* resting star size (1 = longest resting ray is 0.33 of the box) */
+    --star-rest: 0.27;            /* every other ray's length, same units */
     --star-rest-opacity: 0.6;     /* brightness of the resting rays */
     --star-label-gap: 2.5%;
     --star-write: 0.6s;           /* time to write a word, pixel by pixel (was 0.7s) */
@@ -197,23 +197,22 @@
     animation: star-ray calc(var(--star-step) * 8) var(--star-ease) infinite;
     animation-delay: calc(var(--star-step) * (var(--i) - 8));
   }
-  .shape-star__ray:nth-child(1) { --i: 0; --a: 0deg; --rest: 0.1271; }
-  .shape-star__ray:nth-child(2) { --i: 1; --a: 46.7deg; --rest: 0.1725; }
-  .shape-star__ray:nth-child(3) { --i: 2; --a: 90deg; --rest: 0.2356; }
-  .shape-star__ray:nth-child(4) { --i: 3; --a: 132.9deg; --rest: 0.2782; }
-  .shape-star__ray:nth-child(5) { --i: 4; --a: 180deg; --rest: 0.33; }
-  .shape-star__ray:nth-child(6) { --i: 5; --a: 226.7deg; --rest: 0.2892; }
-  .shape-star__ray:nth-child(7) { --i: 6; --a: 270deg; --rest: 0.2285; }
-  .shape-star__ray:nth-child(8) { --i: 7; --a: 312.9deg; --rest: 0.1823; }
+  .shape-star__ray:nth-child(1) { --i: 0; --a: 0deg; }
+  .shape-star__ray:nth-child(2) { --i: 1; --a: 45deg; }
+  .shape-star__ray:nth-child(3) { --i: 2; --a: 90deg; }
+  .shape-star__ray:nth-child(4) { --i: 3; --a: 135deg; }
+  .shape-star__ray:nth-child(5) { --i: 4; --a: 180deg; }
+  .shape-star__ray:nth-child(6) { --i: 5; --a: 225deg; }
+  .shape-star__ray:nth-child(7) { --i: 6; --a: 270deg; }
+  .shape-star__ray:nth-child(8) { --i: 7; --a: 315deg; }
 
-  /* At rest the star is the logo's star (public/assets/logo.svg): the same
-     eight angles and lengths (--a / --rest per ray, measured from the logo),
-     longest ray on the left. Each step one ray grows out to --star-reach and
-     back — only the outgoing and incoming rays move, so the star stays put.
+  /* Two lengths only: the long ray (--star-reach) and the rest (--star-rest).
+     Each step just two rays move — the long one shrinks back, the next grows
+     out; the other six stay put, so the star itself never shifts.
      Holds 60% of a step, swaps during the other 40%. */
   @keyframes star-ray {
     0%, 7.5% { scale: calc(var(--star-reach) * 2) 1; opacity: 1; }
-    12.5%, 95% { scale: calc(var(--rest) * var(--star-rest-scale) * 2) 1; opacity: var(--star-rest-opacity); }
+    12.5%, 95% { scale: calc(var(--star-rest) * 2) 1; opacity: var(--star-rest-opacity); }
     100% { scale: calc(var(--star-reach) * 2) 1; opacity: 1; }
   }
 
@@ -228,13 +227,13 @@
     white-space: nowrap;
   }
   .shape-star__label:nth-child(1) { --i: 0; --dx: 1.0; --dy: 0.0; }
-  .shape-star__label:nth-child(2) { --i: 1; --dx: 0.686; --dy: 0.728; }
+  .shape-star__label:nth-child(2) { --i: 1; --dx: 0.707; --dy: 0.707; }
   .shape-star__label:nth-child(3) { --i: 2; --dx: 0.0; --dy: 1.0; }
-  .shape-star__label:nth-child(4) { --i: 3; --dx: -0.681; --dy: 0.733; }
+  .shape-star__label:nth-child(4) { --i: 3; --dx: -0.707; --dy: 0.707; }
   .shape-star__label:nth-child(5) { --i: 4; --dx: -1.0; --dy: 0.0; }
-  .shape-star__label:nth-child(6) { --i: 5; --dx: -0.686; --dy: -0.728; }
+  .shape-star__label:nth-child(6) { --i: 5; --dx: -0.707; --dy: -0.707; }
   .shape-star__label:nth-child(7) { --i: 6; --dx: -0.0; --dy: -1.0; }
-  .shape-star__label:nth-child(8) { --i: 7; --dx: 0.681; --dy: -0.733; }
+  .shape-star__label:nth-child(8) { --i: 7; --dx: 0.707; --dy: -0.707; }
 
   /* Straight rays: tuck the word alongside the tip instead of past it,
      so it never lands on the headline or the bottom divider. */
