@@ -97,7 +97,7 @@ export function FitCallForm({ heading }: { heading: ReactNode }) {
         <p className="type-lead">
           אפשר לבחור כבר עכשיו מועד לשיחה.
           <br />
-          הקישור מחכה לכם גם במייל.
+          נשלח לכם גם תזכורת במייל.
         </p>
         <a
           href={BOOKING_URL}

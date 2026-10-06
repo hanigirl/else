@@ -126,8 +126,10 @@ export async function addLeadToList(lead: Lead) {
  * Variables the template can use: {{ params.FIRSTNAME }}, {{ params.FULL_NAME }},
  * {{ params.STAGE }}, {{ params.BOOKING_URL }}
  */
-// Template 80 "else-uiux · אישור הרשמה לשיחה (v2)" — source: emails/confirmation.html (Figma 65:1309)
-const CONFIRM_TEMPLATE_ID: number | null = Number(process.env.BREVO_CONFIRM_TEMPLATE_ID) || 80;
+// Template 81 "else-uiux · תזכורת לקביעת שיחה (v3)" — source: emails/confirmation.html (Figma 65:1309)
+const CONFIRM_TEMPLATE_ID: number | null = Number(process.env.BREVO_CONFIRM_TEMPLATE_ID) || 81;
+
+const CONFIRM_DELAY_HOURS = 3;
 
 export async function sendConfirmation(lead: Lead, bookingUrl: string) {
   if (!CONFIRM_TEMPLATE_ID) return;
@@ -137,6 +139,8 @@ export async function sendConfirmation(lead: Lead, bookingUrl: string) {
     headers: { "api-key": key, accept: "application/json", "content-type": "application/json" },
     body: JSON.stringify({
       templateId: CONFIRM_TEMPLATE_ID,
+      // a reminder for whoever didn't book from the thank-you screen, so it waits a few hours
+      scheduledAt: new Date(Date.now() + CONFIRM_DELAY_HOURS * 3600_000).toISOString(),
       to: [{ email: lead.email, name: lead.name }],
       params: {
         FIRSTNAME: splitName(lead.name).first,
