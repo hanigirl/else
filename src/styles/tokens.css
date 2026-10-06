@@ -59,6 +59,8 @@
 
   /* ---------- Colour: states ---------- */
   --color-error: #d92d2d;         /* validation messages + invalid outlines (4.7:1 on the form bg) */
+  --color-success: #069561;       /* success border + success action fill (Figma 65:1306) */
+  --color-success-soft: #d5fdee;  /* success message background */
 
   /* ---------- Typography: families ---------- */
   --font-he: var(--font-noto-hebrew), "Noto Sans Hebrew", system-ui, sans-serif;

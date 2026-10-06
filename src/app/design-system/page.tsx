@@ -45,6 +45,8 @@ const colors: { group: string; items: { token: string; hex: string; use: string;
     group: "מצבים",
     items: [
       { token: "error", hex: "#D92D2D", use: "הודעות שגיאה ומסגרת שדה לא תקין" },
+      { token: "success", hex: "#069561", use: "הצלחה — מסגרת וכפתור פעולה" },
+      { token: "success-soft", hex: "#D5FDEE", use: "הצלחה — רקע ההודעה", dark: true },
     ],
   },
 ];

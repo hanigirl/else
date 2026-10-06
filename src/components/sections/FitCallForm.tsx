@@ -85,14 +85,19 @@ export function FitCallForm() {
 
   if (status === "sent") {
     return (
-      <div role="status" className="mt-[50px] flex flex-col gap-3">
-        <p className="type-lead">תודה! הפרטים התקבלו.</p>
-        <p className="type-p">אפשר לבחור כבר עכשיו מועד לשיחה. הקישור מחכה לכם גם במייל.</p>
+      /* Figma 65:1306 — success message */
+      <div role="status" className="mt-[50px] flex flex-col items-start gap-3 rounded-sm border border-success bg-success-soft p-5 text-ink">
+        <p className="type-h3">תודה! הפרטים התקבלו</p>
+        <p className="type-lead">
+          אפשר לבחור כבר עכשיו מועד לשיחה.
+          <br />
+          הקישור מחכה לכם גם במייל.
+        </p>
         <a
           href={BOOKING_URL}
           target="_blank"
           rel="noopener noreferrer"
-          className="type-chip mt-4 inline-flex self-start rounded-sm bg-indigo p-2.5 text-white transition-colors hover:bg-[color-mix(in_srgb,var(--color-indigo)_88%,black)] focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-indigo max-md:w-full max-md:justify-center"
+          className="type-small inline-flex self-end rounded-sm bg-success p-2.5 font-medium text-white transition-colors hover:bg-[color-mix(in_srgb,var(--color-success)_88%,black)] focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-success"
         >
           לקביעת שיחה
         </a>

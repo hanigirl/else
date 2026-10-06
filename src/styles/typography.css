@@ -79,6 +79,14 @@
     line-height: 1.1;
   }
 
+  /* Message title — "תודה! הפרטים התקבלו" (Figma 65:1305) */
+  .type-h3 {
+    font-family: var(--font-he);
+    font-weight: 700;
+    font-size: 20px;
+    line-height: 1.4;
+  }
+
   /* Paragraph — the default body text (section paragraphs) */
   .type-p {
     font-family: var(--font-he);
