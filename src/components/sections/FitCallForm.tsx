@@ -2,7 +2,7 @@
 
 import { useRef, useState, type FormEvent } from "react";
 import { Button, Checkbox, ChoiceChip, TextField } from "@/components/ui";
-import { STAGES as stages } from "@/content/fitCall";
+import { BOOKING_URL, STAGES as stages } from "@/content/fitCall";
 
 const MSG = {
   empty: "חובה למלא את השדה הזה",
@@ -87,7 +87,15 @@ export function FitCallForm() {
     return (
       <div role="status" className="mt-[50px] flex flex-col gap-3">
         <p className="type-lead">תודה! הפרטים התקבלו.</p>
-        <p className="type-p">נחזור אליכם בקרוב לתיאום שיחת ההתאמה.</p>
+        <p className="type-p">אפשר לבחור כבר עכשיו מועד לשיחה. הקישור מחכה לכם גם במייל.</p>
+        <a
+          href={BOOKING_URL}
+          target="_blank"
+          rel="noopener noreferrer"
+          className="type-chip mt-4 inline-flex self-start rounded-sm bg-indigo p-2.5 text-white transition-colors hover:bg-[color-mix(in_srgb,var(--color-indigo)_88%,black)] focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-indigo max-md:w-full max-md:justify-center"
+        >
+          לקביעת שיחה
+        </a>
       </div>
     );
   }
