@@ -116,3 +116,34 @@ export async function addLeadToList(lead: Lead) {
     await upsert(lead.email, attributes);
   }
 }
+
+/**
+ * The confirmation email every form sender gets — sent from here, not from a
+ * Brevo automation on the list, because the list also holds people who never
+ * filled in this form. Hani designs the email as a Brevo template; null = not
+ * ready yet, nothing is sent.
+ *
+ * Variables the template can use: {{ params.FIRSTNAME }}, {{ params.FULL_NAME }},
+ * {{ params.STAGE }}, {{ params.BOOKING_URL }}
+ */
+const CONFIRM_TEMPLATE_ID: number | null = Number(process.env.BREVO_CONFIRM_TEMPLATE_ID) || null;
+
+export async function sendConfirmation(lead: Lead, bookingUrl: string) {
+  if (!CONFIRM_TEMPLATE_ID) return;
+  const key = await getKey();
+  const res = await fetch("https://api.brevo.com/v3/smtp/email", {
+    method: "POST",
+    headers: { "api-key": key, accept: "application/json", "content-type": "application/json" },
+    body: JSON.stringify({
+      templateId: CONFIRM_TEMPLATE_ID,
+      to: [{ email: lead.email, name: lead.name }],
+      params: {
+        FIRSTNAME: splitName(lead.name).first,
+        FULL_NAME: lead.name,
+        STAGE: lead.stage,
+        BOOKING_URL: bookingUrl,
+      },
+    }),
+  });
+  if (!res.ok) throw new Error(`Brevo email ${res.status}: ${await res.text()}`);
+}

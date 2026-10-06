@@ -1,5 +1,5 @@
-import { addLeadToList, type Lead } from "@/lib/brevo";
-import { STAGES } from "@/content/fitCall";
+import { addLeadToList, sendConfirmation, type Lead } from "@/lib/brevo";
+import { BOOKING_URL, STAGES } from "@/content/fitCall";
 
 const clip = (v: unknown, max = 120) =>
   typeof v === "string" && v.trim() ? v.trim().slice(0, max) : undefined;
@@ -44,6 +44,13 @@ export async function POST(request: Request) {
     // the server logs even though the visitor only sees a retry message.
     console.error("[lead] Brevo call failed:", err);
     return Response.json({ error: "upstream" }, { status: 502 });
+  }
+
+  // The lead is already saved — a failed email is logged, never shown as a failed form.
+  try {
+    await sendConfirmation(lead, BOOKING_URL);
+  } catch (err) {
+    console.error("[lead] confirmation email failed:", err);
   }
 
   return Response.json({ ok: true });
