@@ -126,8 +126,8 @@ export async function addLeadToList(lead: Lead) {
  * Variables the template can use: {{ params.FIRSTNAME }}, {{ params.FULL_NAME }},
  * {{ params.STAGE }}, {{ params.BOOKING_URL }}
  */
-// Template 79 "else-uiux · אישור הרשמה לשיחה" — source: emails/confirmation.html (Figma 65:1309)
-const CONFIRM_TEMPLATE_ID: number | null = Number(process.env.BREVO_CONFIRM_TEMPLATE_ID) || 79;
+// Template 80 "else-uiux · אישור הרשמה לשיחה (v2)" — source: emails/confirmation.html (Figma 65:1309)
+const CONFIRM_TEMPLATE_ID: number | null = Number(process.env.BREVO_CONFIRM_TEMPLATE_ID) || 80;
 
 export async function sendConfirmation(lead: Lead, bookingUrl: string) {
   if (!CONFIRM_TEMPLATE_ID) return;
