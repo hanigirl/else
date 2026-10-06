@@ -1,6 +1,6 @@
 "use client";
 
-import { useRef, useState, type FormEvent } from "react";
+import { useEffect, useRef, useState, type FormEvent, type ReactNode } from "react";
 import { Button, Checkbox, ChoiceChip, TextField } from "@/components/ui";
 import { BOOKING_URL, STAGES as stages } from "@/content/fitCall";
 
@@ -29,7 +29,7 @@ function check(field: Field, value: string): string | undefined {
 }
 
 /** The fit-call form (Figma 52:1285). Name, phone, email and consent are required. */
-export function FitCallForm() {
+export function FitCallForm({ heading }: { heading: ReactNode }) {
   const refs = {
     name: useRef<HTMLInputElement>(null),
     phone: useRef<HTMLInputElement>(null),
@@ -38,6 +38,12 @@ export function FitCallForm() {
   };
   const [errors, setErrors] = useState<Errors>({});
   const [status, setStatus] = useState<"idle" | "sending" | "sent" | "failed">("idle");
+  const sentRef = useRef<HTMLDivElement>(null);
+
+  // the form collapses into a short message — bring it into view so nobody is left looking at the portrait
+  useEffect(() => {
+    if (status === "sent") sentRef.current?.scrollIntoView({ behavior: "smooth", block: "center" });
+  }, [status]);
 
   const onSubmit = async (e: FormEvent<HTMLFormElement>) => {
     e.preventDefault();
@@ -86,8 +92,8 @@ export function FitCallForm() {
   if (status === "sent") {
     return (
       /* Figma 65:1306 — success message */
-      <div role="status" className="mt-[50px] flex flex-col items-start gap-3 rounded-sm border border-success bg-success-soft p-5 text-ink">
-        <p className="type-h3">תודה! הפרטים התקבלו</p>
+      <div ref={sentRef} role="status" className="flex flex-col items-start gap-3 rounded-sm border border-success bg-success-soft p-5 text-ink">
+        <p className="type-lead font-bold">תודה! הפרטים התקבלו</p>
         <p className="type-lead">
           אפשר לבחור כבר עכשיו מועד לשיחה.
           <br />
@@ -106,49 +112,52 @@ export function FitCallForm() {
   }
 
   return (
-    <form noValidate onSubmit={onSubmit} className="mt-[50px] flex flex-col gap-[50px]">
-      <div className="grid grid-cols-[350fr_340fr] gap-x-[21px] max-md:grid-cols-1 max-md:gap-y-[50px]">
-        <TextField name="name" label="שם מלא" required autoComplete="name"
-          inputRef={refs.name} error={errors.name} onInput={recheck("name")} />
-        <TextField name="phone" type="tel" label="טלפון" required autoComplete="tel"
-          inputRef={refs.phone} error={errors.phone} onInput={recheck("phone")} />
-      </div>
-      <TextField name="email" type="email" label="אימייל" required autoComplete="email"
-        inputRef={refs.email} error={errors.email} onInput={recheck("email")} />
-
-      <div className="flex flex-col items-start gap-[29px]">
-        <fieldset>
-          <legend className="type-lead mb-[29px]">איפה אתם היום?</legend>
-          <div className="flex flex-wrap gap-4">
-            {stages.map((s) => (
-              <ChoiceChip key={s} name="stage" value={s} defaultChecked={s === stages[0]}>
-                {s}
-              </ChoiceChip>
-            ))}
-          </div>
-        </fieldset>
-        <Checkbox
-          inputRef={refs.consent}
-          required
-          label={
-            <>
-              <span className="max-md:hidden">אני מאשר/ת שיחזרו אליי לתיאום השיחה, ולקבל מ-else עדכונים במייל ובהודעות.</span>
-              {/* phones: a shorter line that fits one row */}
-              <span className="text-[12px] md:hidden">אני מאשר/ת שיחזרו אליי ולקבל עדכונים מ-else</span>
-            </>
-          }
-          error={errors.consent}
-          onChange={(checked) => checked && setErrors((cur) => ({ ...cur, consent: undefined }))}
-        />
-        <div className="flex flex-col gap-3 max-md:w-full">
-          <Button type="submit" disabled={status === "sending"} className="max-md:w-full max-md:justify-center">
-            {status === "sending" ? "שולח…" : "שליחת טופס"}
-          </Button>
-          {status === "failed" && (
-            <p role="alert" className="type-small field-error">משהו השתבש בשליחה. נסו שוב בעוד רגע.</p>
-          )}
+    <>
+      {heading}
+      <form noValidate onSubmit={onSubmit} className="mt-[50px] flex flex-col gap-[50px]">
+        <div className="grid grid-cols-[350fr_340fr] gap-x-[21px] max-md:grid-cols-1 max-md:gap-y-[50px]">
+          <TextField name="name" label="שם מלא" required autoComplete="name"
+            inputRef={refs.name} error={errors.name} onInput={recheck("name")} />
+          <TextField name="phone" type="tel" label="טלפון" required autoComplete="tel"
+            inputRef={refs.phone} error={errors.phone} onInput={recheck("phone")} />
         </div>
-      </div>
-    </form>
+        <TextField name="email" type="email" label="אימייל" required autoComplete="email"
+          inputRef={refs.email} error={errors.email} onInput={recheck("email")} />
+
+        <div className="flex flex-col items-start gap-[29px]">
+          <fieldset>
+            <legend className="type-lead mb-[29px]">איפה אתם היום?</legend>
+            <div className="flex flex-wrap gap-4">
+              {stages.map((s) => (
+                <ChoiceChip key={s} name="stage" value={s} defaultChecked={s === stages[0]}>
+                  {s}
+                </ChoiceChip>
+              ))}
+            </div>
+          </fieldset>
+          <Checkbox
+            inputRef={refs.consent}
+            required
+            label={
+              <>
+                <span className="max-md:hidden">אני מאשר/ת שיחזרו אליי לתיאום השיחה, ולקבל מ-else עדכונים במייל ובהודעות.</span>
+                {/* phones: a shorter line that fits one row */}
+                <span className="text-[12px] md:hidden">אני מאשר/ת שיחזרו אליי ולקבל עדכונים מ-else</span>
+              </>
+            }
+            error={errors.consent}
+            onChange={(checked) => checked && setErrors((cur) => ({ ...cur, consent: undefined }))}
+          />
+          <div className="flex flex-col gap-3 max-md:w-full">
+            <Button type="submit" disabled={status === "sending"} className="max-md:w-full max-md:justify-center">
+              {status === "sending" ? "שולח…" : "שליחת טופס"}
+            </Button>
+            {status === "failed" && (
+              <p role="alert" className="type-small field-error">משהו השתבש בשליחה. נסו שוב בעוד רגע.</p>
+            )}
+          </div>
+        </div>
+      </form>
+    </>
   );
 }
