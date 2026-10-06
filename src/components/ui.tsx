@@ -95,18 +95,21 @@ export function Button({
   children,
   type = "button",
   variant = "primary",
+  disabled,
   className,
 }: {
   children: ReactNode;
   type?: "button" | "submit";
+  disabled?: boolean;
   variant?: "primary" | "secondary";
   className?: string;
 }) {
   return (
     <button
       type={type}
+      disabled={disabled}
       className={[
-        "type-chip inline-flex cursor-pointer rounded-sm p-2.5 transition-colors",
+        "type-chip inline-flex cursor-pointer rounded-sm p-2.5 transition-colors disabled:cursor-wait disabled:opacity-70",
         variant === "primary"
           ? "bg-indigo text-white hover:bg-[color-mix(in_srgb,var(--color-indigo)_88%,black)]"
           : "border border-indigo text-indigo shadow-[inset_0_0_0_1px_var(--color-indigo)] hover:bg-hover",

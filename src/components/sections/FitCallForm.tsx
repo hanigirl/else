@@ -2,8 +2,7 @@
 
 import { useRef, useState, type FormEvent } from "react";
 import { Button, Checkbox, ChoiceChip, TextField } from "@/components/ui";
-
-const stages = ["רוצה להכנס לתחום", "מחפש/ת עבודה בתחום", "מעצב/ת שרוצה להתקדם"];
+import { STAGES as stages } from "@/content/fitCall";
 
 const MSG = {
   empty: "חובה למלא את השדה הזה",
@@ -38,9 +37,11 @@ export function FitCallForm() {
     consent: useRef<HTMLInputElement>(null),
   };
   const [errors, setErrors] = useState<Errors>({});
+  const [status, setStatus] = useState<"idle" | "sending" | "sent" | "failed">("idle");
 
-  const onSubmit = (e: FormEvent<HTMLFormElement>) => {
-    e.preventDefault(); // not wired to a backend yet — leads need a destination first
+  const onSubmit = async (e: FormEvent<HTMLFormElement>) => {
+    e.preventDefault();
+    if (status === "sending") return;
     const next: Errors = {};
     (["name", "phone", "email"] as Field[]).forEach((f) => {
       const err = check(f, refs[f].current?.value ?? "");
@@ -54,12 +55,42 @@ export function FitCallForm() {
       refs[first].current?.focus();
       return;
     }
-    // TODO: send the lead (e.g. Brevo) once the destination is decided
+
+    // → /api/lead → Brevo list "else-uiux-interested"
+    const form = e.currentTarget;
+    const q = new URLSearchParams(window.location.search);
+    setStatus("sending");
+    try {
+      const res = await fetch(`${process.env.NEXT_PUBLIC_BASE_PATH ?? ""}/api/lead`, {
+        method: "POST",
+        headers: { "content-type": "application/json" },
+        body: JSON.stringify({
+          name: refs.name.current?.value,
+          phone: refs.phone.current?.value,
+          email: refs.email.current?.value,
+          stage: new FormData(form).get("stage"),
+          consent: true,
+          utm: { source: q.get("utm_source"), medium: q.get("utm_medium"), campaign: q.get("utm_campaign") },
+        }),
+      });
+      setStatus(res.ok ? "sent" : "failed");
+    } catch {
+      setStatus("failed");
+    }
   };
 
   // once a field shows an error, re-check it as they type so it clears the moment it's fixed
   const recheck = (f: Field) => (value: string) =>
     setErrors((cur) => (cur[f] ? { ...cur, [f]: check(f, value) } : cur));
+
+  if (status === "sent") {
+    return (
+      <div role="status" className="mt-[50px] flex flex-col gap-3">
+        <p className="type-lead">תודה! הפרטים התקבלו.</p>
+        <p className="type-p">נחזור אליכם בקרוב לתיאום שיחת ההתאמה.</p>
+      </div>
+    );
+  }
 
   return (
     <form noValidate onSubmit={onSubmit} className="mt-[50px] flex flex-col gap-[50px]">
@@ -96,7 +127,14 @@ export function FitCallForm() {
           error={errors.consent}
           onChange={(checked) => checked && setErrors((cur) => ({ ...cur, consent: undefined }))}
         />
-        <Button type="submit" className="max-md:w-full max-md:justify-center">שליחת טופס</Button>
+        <div className="flex flex-col gap-3 max-md:w-full">
+          <Button type="submit" disabled={status === "sending"} className="max-md:w-full max-md:justify-center">
+            {status === "sending" ? "שולח…" : "שליחת טופס"}
+          </Button>
+          {status === "failed" && (
+            <p role="alert" className="type-small field-error">משהו השתבש בשליחה. נסו שוב בעוד רגע.</p>
+          )}
+        </div>
       </div>
     </form>
   );
