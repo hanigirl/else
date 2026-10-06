@@ -126,8 +126,8 @@ export async function addLeadToList(lead: Lead) {
  * Variables the template can use: {{ params.FIRSTNAME }}, {{ params.FULL_NAME }},
  * {{ params.STAGE }}, {{ params.BOOKING_URL }}
  */
-// Template 81 "else-uiux · תזכורת לקביעת שיחה (v3)" — source: emails/confirmation.html (Figma 65:1309)
-const CONFIRM_TEMPLATE_ID: number | null = Number(process.env.BREVO_CONFIRM_TEMPLATE_ID) || 81;
+// Template 82 "else-uiux · תזכורת לקביעת שיחה" — source: emails/confirmation.html (Figma 65:1309)
+const CONFIRM_TEMPLATE_ID: number | null = Number(process.env.BREVO_CONFIRM_TEMPLATE_ID) || 82;
 
 const CONFIRM_DELAY_HOURS = 3;
 
