@@ -1,9 +1,12 @@
 import { ShapeMosaic } from "@/components/ShapeMosaic";
 import { WALL_MOBILE, shapeWallMobile } from "@/content/shapeWall";
 import { SectionHeading } from "@/components/ui";
+import type { ReactNode } from "react";
 
 /** Section 2 — Figma 51:1001 "ללמוד את המקצוע כמו שהוא נראה היום" */
-export function LearnSection() {
+const BODY = "כש-AI מייצר מסכים בדקות, מעצבים נמדדים על ההחלטות שלהם, ונדרשים להיכנס לעולמות שפעם לא היו חלק מהתפקיד: מוצר, עסקים, מספרים, קוד ופרזנטציה.";
+
+export function LearnSection({ title = "המקצוע השתנה.", body = BODY }: { title?: string; body?: ReactNode } = {}) {
   return (
     <section className="surface surface--blue overflow-hidden">
       {/* Full-bleed wall, edge to edge like the frame — four shapes a row, two on mobile */}
@@ -16,8 +19,8 @@ export function LearnSection() {
           <div className="col-start-3 col-span-6 max-w-[801px] max-xl:col-start-1 max-xl:col-span-full">
             <SectionHeading
               tone="dark"
-              title="המקצוע השתנה."
-              body="כש-AI מייצר מסכים בדקות, מעצבים נמדדים על ההחלטות שלהם, ונדרשים להיכנס לעולמות שפעם לא היו חלק מהתפקיד: מוצר, עסקים, מספרים, קוד ופרזנטציה."
+              title={title}
+              body={body}
             />
           </div>
         </div>

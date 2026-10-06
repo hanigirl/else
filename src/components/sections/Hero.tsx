@@ -2,12 +2,13 @@
 import { BlurStar } from "@/components/Shape";
 import { Logo } from "@/components/ui";
 import { asset } from "@/lib/asset";
+import type { ReactNode } from "react";
 
 /** TEST: the shape wall's dot grid behind the hero — right side only, slanted fade. false = off */
 const DOT_GRID = true;
 
 /** Section 1 — Figma 51:973 "Learn UI/UX in a new way" */
-export function Hero() {
+export function Hero({ footer }: { footer?: ReactNode } = {}) {
   return (
     <section
       className={[
@@ -60,6 +61,12 @@ export function Hero() {
           </div>
           <img src={asset("/assets/arrow-line-h.svg")} alt="" width={69} height={2} className="absolute left-0 top-[82px] max-w-none" />
         </div>
+        {/* optional line + action, on the arrow's baseline, at the other side */}
+        {footer && (
+          <div dir="rtl" className="absolute bottom-[73px] right-[var(--page-margin)] max-w-[min(560px,calc(100%-var(--page-margin)*2-96px))]">
+            {footer}
+          </div>
+        )}
       </div>
     </section>
   );

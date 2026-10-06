@@ -1,0 +1,104 @@
+/* ==========================================================================
+   else — pixel primitives (components/pixel/*)
+   The wall's language, taken off the wall: everything rests as faint stones
+   and gets painted, pixel by pixel, into what it is.
+   ========================================================================== */
+
+@layer components {
+  /* ---------- Night surface — the darkest sheet (black → navy), for the
+     sections that carry a punchline ---------- */
+  .surface--night {
+    --surface-angle: 165deg;
+    --surface-from: var(--color-black);
+    --surface-to: var(--color-navy);
+    --grain-opacity: 0.45;
+    --grain-size: 256px;
+    color: var(--color-white);
+  }
+
+  /* ---------- PixelText ---------- */
+  .pixel-text {
+    position: relative;
+  }
+  .pixel-text.is-ready .pixel-text__words {
+    position: absolute;
+    width: 1px;
+    height: 1px;
+    overflow: hidden;
+    clip-path: inset(50%);
+    white-space: nowrap;
+  }
+  .pixel-text__canvas {
+    position: absolute;
+    top: 0;
+    inset-inline-start: 0;
+    pointer-events: none;
+  }
+
+  /* ---------- PixelShape ----------
+     Off: every pixel a stone (42% of its cell, faint, in the text colour).
+     On: painted top-down in --px-color with the ragged front; off again, it
+     falls back bottom-up. Steps, never glides. */
+  .pixel-shape {
+    --px-ghost: 0.14;
+    display: grid;
+    grid-template-columns: repeat(var(--cols), minmax(0, 1fr));
+    grid-template-rows: repeat(var(--rows), minmax(0, 1fr));
+    aspect-ratio: var(--cols) / var(--rows);
+    width: 100%;
+  }
+  .pixel-shape > i {
+    grid-column: calc(var(--c) + 1);
+    grid-row: calc(var(--r) + 1);
+    background: currentColor;
+    opacity: var(--px-ghost);
+    scale: 0.42;
+    transition: scale 0s, opacity 0s, background-color 0s;
+    transition-delay: calc((1 - var(--d)) * var(--px-speed) * 0.5);
+  }
+  .pixel-shape.is-on > i {
+    background: var(--px-color);
+    opacity: 1;
+    scale: 1.02; /* closes the hairline seams between pixels */
+    transition-delay: calc(var(--d) * var(--px-speed));
+  }
+  /* quiet: when off, the pixels leave entirely instead of resting as stones —
+     for shapes stacked on one stage where only the live one may show */
+  .pixel-shape.is-quiet:not(.is-on) > i {
+    opacity: 0;
+  }
+  @media (prefers-reduced-motion: reduce) {
+    .pixel-shape > i { transition-delay: 0s !important; }
+  }
+
+  /* ---------- PixelImage ---------- */
+  .pixel-image__mosaic {
+    image-rendering: pixelated;
+    pointer-events: none;
+  }
+
+  /* ---------- FAQ (details/summary) ---------- */
+  .faq summary {
+    list-style: none;
+    cursor: pointer;
+  }
+  .faq summary::-webkit-details-marker {
+    display: none;
+  }
+
+  /* ---------- Browser surfaces on the landing page ---------- */
+  .lp ::selection {
+    background: var(--color-indigo);
+    color: var(--color-white);
+  }
+  .lp a:focus-visible,
+  .lp summary:focus-visible,
+  .lp button:focus-visible {
+    outline: 2px solid var(--color-indigo);
+    outline-offset: 3px;
+  }
+  .lp .on-dark a:focus-visible,
+  .lp .on-dark summary:focus-visible {
+    outline-color: var(--color-white);
+  }
+}

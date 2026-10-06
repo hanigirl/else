@@ -6,7 +6,7 @@ import { FitCallForm } from "./FitCallForm";
 
 export function FitCallSection() {
   return (
-    <div className="page-container pt-[clamp(40px,2.45vw,47px)]">
+    <div id="fit-call" className="page-container scroll-mt-6 pt-[clamp(40px,2.45vw,47px)]">
       <div className="grid-12 gap-y-14">
         {/* Form — right side (RTL start), 5 columns */}
         <div className="col-span-5 pt-[clamp(0px,3.2vw,61px)] max-xl:col-span-full">

@@ -79,6 +79,30 @@
     line-height: 1.1;
   }
 
+  /* Punchline — one sentence that owns a whole section, built from pixels (PixelText) */
+  .type-punch {
+    font-family: var(--font-he);
+    font-weight: 800;
+    font-size: clamp(44px, 7.3vw, 140px);
+    line-height: 1.05;
+  }
+
+  /* Statement — a closing line inside a section, also pixel-built */
+  .type-statement {
+    font-family: var(--font-he);
+    font-weight: 800;
+    font-size: clamp(30px, 3.6vw, 68px);
+    line-height: 1.1;
+  }
+
+  /* Item title — list rows, worlds, FAQ questions */
+  .type-item {
+    font-family: var(--font-he);
+    font-weight: 700;
+    font-size: clamp(18px, 1.15vw, 22px);
+    line-height: 1.35;
+  }
+
   /* Paragraph — the default body text (section paragraphs) */
   .type-p {
     font-family: var(--font-he);
