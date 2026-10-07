@@ -1,9 +1,9 @@
-import { addBuyerToList, sendPurchaseWelcome } from "@/lib/brevo";
+import { addBuyerToList, removeBuyerFromInterested, sendPurchaseWelcome } from "@/lib/brevo";
 
 /**
  * Grow webhook for the else-uiux payment link: every buyer lands in Brevo
- * list 22 "else-uiux-purchased".
- * Each one also gets the welcome email with the WhatsApp group link.
+ * list 22 "else-uiux-purchased", leaves list 21 "else-uiux-interested", and
+ * gets the welcome email with the WhatsApp group link.
  *
  * Grow doesn't sign its webhooks, so the URL configured in Grow carries a
  * secret (?key=…) that has to match GROW_WEBHOOK_SECRET.
@@ -62,6 +62,12 @@ export async function POST(request: Request) {
   }
 
   console.log("[grow] buyer added:", email, str(fields.purchasePageTitle) ?? "");
+
+  try {
+    await removeBuyerFromInterested(email);
+  } catch (err) {
+    console.error("[grow] couldn't remove buyer from the interested list:", email, err);
+  }
 
   // The buyer is already saved — a failed email is logged, not retried, since a
   // retry would also re-send to everyone whose email did go out.

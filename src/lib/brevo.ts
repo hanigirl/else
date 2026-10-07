@@ -179,6 +179,18 @@ export async function addBuyerToList(buyer: Buyer) {
   }
 }
 
+/** A buyer is no longer a lead: take them off list 21 so lead campaigns skip them. */
+export async function removeBuyerFromInterested(email: string) {
+  const key = await getKey();
+  const res = await fetch(`${API}/${encodeURIComponent(email)}?identifierType=email_id`, {
+    method: "PUT",
+    headers: { "api-key": key, accept: "application/json", "content-type": "application/json" },
+    body: JSON.stringify({ unlinkListIds: [BREVO_LIST_ID] }),
+  });
+  if (res.status === 204) return;
+  throw new Error(`Brevo ${res.status}: ${await res.text()}`);
+}
+
 // Template 84 "else-uiux · ברוכים הבאים (רכישה)" — source: emails/purchase.html (Figma 76:454).
 // The WhatsApp group link lives in the template, so a new cohort's group is edited in Brevo.
 const PURCHASE_TEMPLATE_ID = Number(process.env.BREVO_PURCHASE_TEMPLATE_ID) || 84;
