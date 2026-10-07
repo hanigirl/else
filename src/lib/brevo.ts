@@ -178,3 +178,22 @@ export async function addBuyerToList(buyer: Buyer) {
     await upsert(buyer.email, attributes, PURCHASED_LIST_ID);
   }
 }
+
+// Template 84 "else-uiux · ברוכים הבאים (רכישה)" — source: emails/purchase.html (Figma 76:454).
+// The WhatsApp group link lives in the template, so a new cohort's group is edited in Brevo.
+const PURCHASE_TEMPLATE_ID = Number(process.env.BREVO_PURCHASE_TEMPLATE_ID) || 84;
+
+/** The welcome email every buyer gets, right away. */
+export async function sendPurchaseWelcome(buyer: Buyer) {
+  const key = await getKey();
+  const res = await fetch("https://api.brevo.com/v3/smtp/email", {
+    method: "POST",
+    headers: { "api-key": key, accept: "application/json", "content-type": "application/json" },
+    body: JSON.stringify({
+      templateId: PURCHASE_TEMPLATE_ID,
+      to: [buyer.name ? { email: buyer.email, name: buyer.name } : { email: buyer.email }],
+      params: { FIRSTNAME: buyer.name ? splitName(buyer.name).first : "" },
+    }),
+  });
+  if (!res.ok) throw new Error(`Brevo email ${res.status}: ${await res.text()}`);
+}

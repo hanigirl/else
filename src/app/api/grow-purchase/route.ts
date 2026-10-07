@@ -1,8 +1,9 @@
-import { addBuyerToList } from "@/lib/brevo";
+import { addBuyerToList, sendPurchaseWelcome } from "@/lib/brevo";
 
 /**
  * Grow webhook for the else-uiux payment link: every buyer lands in Brevo
  * list 22 "else-uiux-purchased".
+ * Each one also gets the welcome email with the WhatsApp group link.
  *
  * Grow doesn't sign its webhooks, so the URL configured in Grow carries a
  * secret (?key=…) that has to match GROW_WEBHOOK_SECRET.
@@ -51,8 +52,9 @@ export async function POST(request: Request) {
     return Response.json({ error: "no_email" }, { status: 400 });
   }
 
+  const buyer = { email, name: str(fields.fullName), phone: str(fields.payerPhone) };
   try {
-    await addBuyerToList({ email, name: str(fields.fullName), phone: str(fields.payerPhone) });
+    await addBuyerToList(buyer);
   } catch (err) {
     // a non-2xx makes Grow retry (10/20/30 min), so a Brevo hiccup doesn't lose the buyer
     console.error("[grow] Brevo call failed:", err);
@@ -60,5 +62,13 @@ export async function POST(request: Request) {
   }
 
   console.log("[grow] buyer added:", email, str(fields.purchasePageTitle) ?? "");
+
+  // The buyer is already saved — a failed email is logged, not retried, since a
+  // retry would also re-send to everyone whose email did go out.
+  try {
+    await sendPurchaseWelcome(buyer);
+  } catch (err) {
+    console.error("[grow] welcome email failed:", email, err);
+  }
   return Response.json({ ok: true });
 }

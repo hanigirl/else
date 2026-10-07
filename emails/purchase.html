@@ -1,0 +1,81 @@
+<!doctype html>
+<!--
+  Welcome email for buyers of the else-uiux payment link (Figma iBgu0Sh20kqNKpwNqEYu7k 76:454).
+  Lives in Brevo as a transactional template; this file is its source.
+  Sent by src/lib/brevo.ts → sendPurchaseWelcome, right after the Grow webhook adds the buyer to list 22.
+  The header (76:424) and the footer tagline/logo (76:459, 76:452) are flat images — the grain
+  shader and Clash Display can't run in email. The WhatsApp group link is in the template itself,
+  so a new cohort's group is a Brevo edit, not a deploy.
+-->
+<html lang="he" dir="rtl">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <meta name="color-scheme" content="light only">
+  <title>איזה כיף שנרשמת!</title>
+  <style>
+    @media (max-width: 620px) {
+      .body-cell { padding: 32px 24px 40px !important; }
+      .footer-cell { padding: 32px 24px !important; }
+      .hello { font-size: 24px !important; }
+    }
+  </style>
+</head>
+<body style="margin:0; padding:0; background-color:#eef0f8;">
+  <div style="display:none; max-height:0; overflow:hidden; mso-hide:all;">ברוכים הבאים! הקישור לקבוצת הוואטסאפ של המחזור מחכה כאן</div>
+  <table role="presentation" width="100%" cellpadding="0" cellspacing="0" border="0" style="background-color:#eef0f8;">
+    <tr>
+      <td align="center" style="padding:0;">
+        <table role="presentation" width="600" cellpadding="0" cellspacing="0" border="0" style="width:100%; max-width:600px; background-color:#f7f7fc;">
+          <tr>
+            <td style="padding:0; background-color:#1a237e;">
+              <img src="https://www.weareelse.co.il/learnuiux/assets/email/purchase-hero.jpg" width="600" alt="else — Learn UI/UX in a new way" style="display:block; width:100%; max-width:600px; height:auto; border:0;">
+            </td>
+          </tr>
+          <tr>
+            <td class="body-cell" dir="rtl" align="right" style="padding:48px 48px 56px; font-family:Arial, Helvetica, sans-serif; font-size:16px; line-height:1.4; color:#383845; text-align:right;">
+              <p class="hello" style="margin:0 0 24px; font-size:32px; line-height:1.2; font-weight:bold;">איזה כיף שנרשמת!</p>
+
+              <p style="margin:0;">ברוכים הבאים לתכנית ליווי של 8 שבועות שיהיו המקפצה הבאה שלך בקריירה.</p>
+              <p style="margin:0 0 22px;">כמה דברים חשובים לפני שמתחילים:</p>
+
+              <p style="margin:0;">1. באנו לשנות, לא לעשות את אותו הדבר ולחוות את אותה תוצאה.</p>
+              <p style="margin:0 0 22px; padding-right:18px;">זה דורש מכם מקסימום מיקוד, ולסמוך על הדרך. מאמינה בכם!</p>
+
+              <p style="margin:0;">2. הצטרפו לקבוצת הוואצאפ של המחזור הקרוב</p>
+              <p style="margin:0 0 16px; padding-right:18px;">שם יהיו עדכונים, תמיכה, וגיפים כמובן :)</p>
+
+              <table role="presentation" cellpadding="0" cellspacing="0" border="0" align="right" style="margin:0 18px 40px 0;">
+                <tr>
+                  <td style="background-color:#5651ed; border-radius:6px;">
+                    <a href="https://chat.whatsapp.com/G3ZzOyMBITD9OzOKZjJ7Id?mode=gi_t" target="_blank" style="display:inline-block; padding:10px 16px; font-family:Arial, Helvetica, sans-serif; font-size:16px; line-height:1.4; color:#ffffff; text-decoration:none; border-radius:6px;">להצטרפות לקבוצה</a>
+                  </td>
+                </tr>
+              </table>
+              <div style="clear:both;"></div>
+
+              <p style="margin:0;">מתחילים ממש בקרוב!</p>
+              <p style="margin:0;">באהבה גדולה,</p>
+              <p style="margin:0;">חני</p>
+            </td>
+          </tr>
+          <tr>
+            <td class="footer-cell" dir="ltr" style="padding:40px 48px; background-color:#ffffff;">
+              <table role="presentation" width="100%" cellpadding="0" cellspacing="0" border="0">
+                <tr>
+                  <td align="left" valign="middle">
+                    <img src="https://www.weareelse.co.il/learnuiux/assets/email/footer-tagline.png" width="230" alt="AI can make anything. We make something else" style="display:block; width:230px; height:auto; border:0;">
+                  </td>
+                  <td align="right" valign="middle" width="24">
+                    <img src="https://www.weareelse.co.il/learnuiux/assets/email/footer-logo.png" width="24" alt="else" style="display:block; width:24px; height:auto; border:0;">
+                  </td>
+                </tr>
+              </table>
+            </td>
+          </tr>
+        </table>
+      </td>
+    </tr>
+  </table>
+</body>
+</html>
