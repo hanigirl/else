@@ -63,7 +63,7 @@ function splitName(full: string): { first: string; last: string } {
 
 type Attributes = Record<string, string | boolean>;
 
-async function upsert(email: string, attributes: Attributes) {
+async function upsert(email: string, attributes: Attributes, listId = BREVO_LIST_ID) {
   const key = await getKey();
 
   const res = await fetch(API, {
@@ -76,7 +76,7 @@ async function upsert(email: string, attributes: Attributes) {
     body: JSON.stringify({
       email,
       attributes,
-      listIds: [BREVO_LIST_ID],
+      listIds: [listId],
       // Someone who already exists in the account (a d2c lead, say) is updated
       // and added to this list instead of 400-ing as a duplicate.
       updateEnabled: true,
@@ -151,4 +151,30 @@ export async function sendConfirmation(lead: Lead, bookingUrl: string) {
     }),
   });
   if (!res.ok) throw new Error(`Brevo email ${res.status}: ${await res.text()}`);
+}
+
+// List 22 in the UXtra account: "else-uiux-purchased".
+const PURCHASED_LIST_ID = Number(process.env.BREVO_PURCHASED_LIST_ID ?? 22);
+
+export type Buyer = { email: string; name?: string; phone?: string };
+
+/** Someone who paid through the Grow payment link. */
+export async function addBuyerToList(buyer: Buyer) {
+  const attributes: Attributes = {};
+  if (buyer.name) {
+    const { first, last } = splitName(buyer.name);
+    Object.assign(attributes, { FULL_NAME: buyer.name, FIRSTNAME: first, LASTNAME: last });
+  }
+  if (buyer.phone) attributes.PHONE = buyer.phone;
+
+  const sms = buyer.phone ? toE164(buyer.phone) : null;
+  try {
+    await upsert(buyer.email, sms ? { ...attributes, SMS: sms } : attributes, PURCHASED_LIST_ID);
+  } catch (err) {
+    // same fallback as the form: a bad SMS number must not cost us the buyer
+    const message = err instanceof Error ? err.message : String(err);
+    if (!sms || !message.startsWith("Brevo 400")) throw err;
+    console.warn("[brevo] saving buyer without SMS:", message);
+    await upsert(buyer.email, attributes, PURCHASED_LIST_ID);
+  }
 }
