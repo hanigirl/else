@@ -40,6 +40,11 @@ export async function POST(request: Request) {
     return Response.json({ error: "invalid_body" }, { status: 400 });
   }
 
+  // The account-wide Grow webhook fires for every product, not just the else link —
+  // log the whole payload (minus card details) to find the field that tells them apart.
+  const loggable = Object.fromEntries(Object.entries(fields).filter(([k]) => !k.startsWith("card")));
+  console.log("[grow] payload:", JSON.stringify(loggable));
+
   // Grow's status code 2 = paid. Page webhooks only fire on success and carry no status at all.
   if (fields.statusCode !== undefined && String(fields.statusCode) !== "2") {
     console.log("[grow] ignoring non-paid update:", fields.statusCode, fields.status);
