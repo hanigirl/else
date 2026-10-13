@@ -1,7 +1,7 @@
 import { addBuyerToList, removeBuyerFromInterested, sendPurchaseWelcome } from "@/lib/brevo";
 
 /**
- * Grow webhook for the else-uiux payment link: every buyer lands in Brevo
+ * Grow webhook for the else-uiux payment link: every buyer of that product lands in Brevo
  * list 22 "else-uiux-purchased", leaves list 21 "else-uiux-interested", and
  * gets the welcome email with the WhatsApp group link.
  *
@@ -27,6 +27,23 @@ async function readFields(request: Request): Promise<Fields> {
 
 const str = (v: unknown) => (typeof v === "string" && v.trim() ? v.trim() : undefined);
 
+/** What the else product's description / page title says in Grow. */
+const ELSE_PRODUCT = /learn\s*ui\s*\/?\s*ux/i;
+
+/**
+ * The Grow webhook is account-wide — it fires for every product (d2c, figma flow…).
+ * Only a purchase whose product description or page title names the else course counts.
+ * Grow's field names vary (description, productDescription, productData[0][name]…),
+ * so this checks every product/description/title field, nested or flattened.
+ */
+function isElsePurchase(value: unknown, key = ""): boolean {
+  if (typeof value === "string") return /desc|product|title/i.test(key) && ELSE_PRODUCT.test(value);
+  if (Array.isArray(value)) return value.some((v) => isElsePurchase(v, key));
+  if (typeof value === "object" && value !== null)
+    return Object.entries(value).some(([k, v]) => isElsePurchase(v, `${key}.${k}`));
+  return false;
+}
+
 export async function POST(request: Request) {
   const secret = process.env.GROW_WEBHOOK_SECRET;
   if (!secret || new URL(request.url).searchParams.get("key") !== secret) {
@@ -40,8 +57,6 @@ export async function POST(request: Request) {
     return Response.json({ error: "invalid_body" }, { status: 400 });
   }
 
-  // The account-wide Grow webhook fires for every product, not just the else link —
-  // log the whole payload (minus card details) to find the field that tells them apart.
   const loggable = Object.fromEntries(Object.entries(fields).filter(([k]) => !k.startsWith("card")));
   console.log("[grow] payload:", JSON.stringify(loggable));
 
@@ -49,6 +64,11 @@ export async function POST(request: Request) {
   if (fields.statusCode !== undefined && String(fields.statusCode) !== "2") {
     console.log("[grow] ignoring non-paid update:", fields.statusCode, fields.status);
     return Response.json({ ok: true, ignored: true });
+  }
+
+  if (!isElsePurchase(fields)) {
+    console.log("[grow] ignoring purchase of another product:", str(fields.payerEmail) ?? "");
+    return Response.json({ ok: true, ignored: "other_product" });
   }
 
   const email = str(fields.payerEmail)?.toLowerCase();
