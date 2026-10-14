@@ -5,6 +5,10 @@ import { addBuyerToList, removeBuyerFromInterested, sendPurchaseWelcome } from "
  * list 22 "else-uiux-purchased", leaves list 21 "else-uiux-interested", and
  * gets the welcome email with the WhatsApp group link.
  *
+ * The Grow webhook is account-wide, so this route is also the one place that hands
+ * d2c purchases on to the partner's Smoove webhook (PARTNER_D2C_WEBHOOK_URL) —
+ * he gets only d2c, never figma flow or else.
+ *
  * Grow doesn't sign its webhooks, so the URL configured in Grow carries a
  * secret (?key=…) that has to match GROW_WEBHOOK_SECRET.
  */
@@ -12,13 +16,12 @@ import { addBuyerToList, removeBuyerFromInterested, sendPurchaseWelcome } from "
 type Fields = Record<string, unknown>;
 
 /** Grow posts JSON or a form, sometimes with everything nested under `data`. */
-async function readFields(request: Request): Promise<Fields> {
-  const type = request.headers.get("content-type") ?? "";
+function parseFields(body: string, type: string): Fields {
   let raw: Fields = {};
   if (type.includes("application/json")) {
-    raw = (await request.json()) as Fields;
+    raw = JSON.parse(body) as Fields;
   } else {
-    const form = new URLSearchParams(await request.text());
+    const form = new URLSearchParams(body);
     for (const [k, v] of form) raw[k.replace(/^data\[(.+)\]$/, "$1")] = v;
   }
   const nested = raw.data;
@@ -27,20 +30,21 @@ async function readFields(request: Request): Promise<Fields> {
 
 const str = (v: unknown) => (typeof v === "string" && v.trim() ? v.trim() : undefined);
 
-/** What the else product's description / page title says in Grow. */
+/** What the payment link's internal name ("עבור שירות") says in Grow. */
 const ELSE_PRODUCT = /learn\s*ui\s*\/?\s*ux/i;
+const D2C_PRODUCT = /d2c|design\s*to\s*code/i;
 
 /**
- * The Grow webhook is account-wide — it fires for every product (d2c, figma flow…).
- * Only a purchase whose product description or page title names the else course counts.
+ * The Grow webhook is account-wide — it fires for every product (d2c, figma flow…),
+ * so the product is read off the payment link's name.
  * Grow's field names vary (description, productDescription, productData[0][name]…),
  * so this checks every product/description/title field, nested or flattened.
  */
-function isElsePurchase(value: unknown, key = ""): boolean {
-  if (typeof value === "string") return /desc|product|title/i.test(key) && ELSE_PRODUCT.test(value);
-  if (Array.isArray(value)) return value.some((v) => isElsePurchase(v, key));
+function isPurchaseOf(product: RegExp, value: unknown, key = ""): boolean {
+  if (typeof value === "string") return /desc|product|title/i.test(key) && product.test(value);
+  if (Array.isArray(value)) return value.some((v) => isPurchaseOf(product, v, key));
   if (typeof value === "object" && value !== null)
-    return Object.entries(value).some(([k, v]) => isElsePurchase(v, `${key}.${k}`));
+    return Object.entries(value).some(([k, v]) => isPurchaseOf(product, v, `${key}.${k}`));
   return false;
 }
 
@@ -50,9 +54,11 @@ export async function POST(request: Request) {
     return Response.json({ error: "unauthorized" }, { status: 401 });
   }
 
+  const type = request.headers.get("content-type") ?? "";
+  const body = await request.text();
   let fields: Fields;
   try {
-    fields = await readFields(request);
+    fields = parseFields(body, type);
   } catch {
     return Response.json({ error: "invalid_body" }, { status: 400 });
   }
@@ -66,7 +72,24 @@ export async function POST(request: Request) {
     return Response.json({ ok: true, ignored: true });
   }
 
-  if (!isElsePurchase(fields)) {
+  if (isPurchaseOf(D2C_PRODUCT, fields)) {
+    const partner = process.env.PARTNER_D2C_WEBHOOK_URL;
+    if (!partner) {
+      console.error("[grow] d2c purchase but PARTNER_D2C_WEBHOOK_URL is not set:", str(fields.payerEmail) ?? "");
+      return Response.json({ ok: true, ignored: "no_partner_url" });
+    }
+    // Pass Grow's original body through untouched, so his Smoove setup sees what it always did.
+    const res = await fetch(partner, { method: "POST", headers: { "content-type": type }, body }).catch((err) => err as Error);
+    if (res instanceof Error || !res.ok) {
+      // a non-2xx makes Grow retry, so a partner hiccup doesn't lose the buyer
+      console.error("[grow] forwarding d2c purchase failed:", res instanceof Error ? res : res.status);
+      return Response.json({ error: "partner_upstream" }, { status: 502 });
+    }
+    console.log("[grow] d2c purchase forwarded to partner:", str(fields.payerEmail) ?? "");
+    return Response.json({ ok: true, forwarded: "d2c" });
+  }
+
+  if (!isPurchaseOf(ELSE_PRODUCT, fields)) {
     console.log("[grow] ignoring purchase of another product:", str(fields.payerEmail) ?? "");
     return Response.json({ ok: true, ignored: "other_product" });
   }
