@@ -439,7 +439,12 @@ body:hover #hud,#hud:focus-within{opacity:1}
 
 
   // Offer countdown: ends Tue 20.10.2026 23:59 (Israel time).
+  // ?until=thu (one Brevo list) runs to Thu 22.10 with its own Grow coupon.
   var DEADLINE=new Date("2026-10-20T23:59:00+03:00").getTime();
+  if(new URLSearchParams(location.search).get("until")==="thu"){
+    DEADLINE=new Date("2026-10-22T23:59:00+03:00").getTime();
+    document.getElementById("coupon").textContent="timetoshine10";
+  }
   var tH=document.getElementById("tH"),tM=document.getElementById("tM"),tS=document.getElementById("tS"),tBox=document.getElementById("timer");
   function pad(n){return (n<10?"0":"")+n}
   function tickTimer(){var d=Math.max(0,Math.floor((DEADLINE-Date.now())/1000));
