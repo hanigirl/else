@@ -177,6 +177,24 @@ body{background:var(--frame);color:var(--white);font-family:var(--sans);overflow
 .syllabus.on .cta .price{animation:popin .5s cubic-bezier(.34,1.56,.64,1) 1.6s forwards}
 @keyframes popin{from{opacity:0;transform:scale(.7)}to{opacity:1;transform:none}}
 
+/* ---------- Slide 5: session calendar ---------- */
+.cal{position:absolute;right:128px;top:126px;width:1664px;display:grid;grid-template-columns:120px repeat(5,1fr) repeat(2,.55fr);grid-template-rows:36px;grid-auto-rows:90px;gap:8px}
+.cal-h{align-self:end;padding:0 14px 4px;font-size:22px;color:var(--dim)}
+.cal-w{align-self:center;font-size:22px;font-weight:500;color:var(--pixel);letter-spacing:.04em}
+.cal-d{position:relative;display:flex;flex-direction:column;align-items:flex-start;gap:6px;padding:10px 14px;border-radius:14px;border:1px solid rgba(201,206,232,.14);background:rgba(246,247,253,.03)}
+.cal-d.we{opacity:.45}
+.cal-n{font-size:20px;color:var(--dim)}
+.cal-d.ses{background:linear-gradient(160deg,#5651ED,#312E87);border-color:rgba(175,186,254,.5);box-shadow:0 0 24px rgba(86,81,237,.35)}
+.cal-d.ses.one{background:rgba(86,81,237,.12);border:2px dashed var(--pixel);box-shadow:none}
+.cal-d.ses .cal-n{position:absolute;left:14px;top:12px;color:rgba(246,247,253,.8)}
+.cal-m{font-style:normal;font-size:17px;line-height:1;padding:5px 12px;border-radius:999px;background:rgba(6,8,28,.35);color:#fff}
+.cal-d.one .cal-m{background:none;border:1px solid rgba(175,186,254,.45);color:var(--pixel)}
+.cal-t{font-size:20px;line-height:1.2;color:#fff}
+.cal-key{position:absolute;right:128px;bottom:40px;display:flex;gap:40px;margin:0;font-size:20px;color:var(--dim)}
+.cal-key span{display:flex;align-items:center;gap:12px}
+.cal-key i{width:28px;height:20px;border-radius:6px;background:linear-gradient(160deg,#5651ED,#312E87)}
+.cal-key i.one{background:none;border:2px dashed var(--pixel)}
+
 /* ---------- Controls ---------- */
 #hud{position:fixed;left:50%;bottom:14px;transform:translateX(-50%);display:flex;gap:10px;align-items:center;
   padding:6px 10px;background:rgba(11,16,70,.55);border:1px solid rgba(255,255,255,.12);border-radius:6px;opacity:0;transition:opacity .3s}
@@ -193,8 +211,9 @@ body:hover #hud,#hud:focus-within{opacity:1}
   #viewport{position:static}
   #stage{position:relative;left:auto;top:auto;width:100%;height:auto;transform:none!important;overflow:visible}
   #hud{display:none}
-  #topnav{position:sticky;top:0;left:auto;transform:none;width:100%;justify-content:center;gap:18px;padding:14px 16px;font-size:14px;
-    background:rgba(6,8,28,.86);-webkit-backdrop-filter:blur(10px);backdrop-filter:blur(10px);border-bottom:1px solid rgba(175,186,254,.14);overflow-x:auto}
+  #topnav{position:sticky;top:0;left:auto;transform:none;width:100%;justify-content:center;gap:14px;padding:14px 12px;font-size:13px;
+    background:rgba(6,8,28,.86);-webkit-backdrop-filter:blur(10px);backdrop-filter:blur(10px);border-bottom:1px solid rgba(175,186,254,.14);overflow-x:auto;scrollbar-width:none}
+  #topnav::-webkit-scrollbar{display:none}
   #topnav a{padding:4px 0;border-bottom-width:1.5px}
   #topnav.on-light a{color:rgba(246,247,253,.62)}
   #topnav.on-light a.on{color:#fff;border-bottom-color:var(--pixel)}
@@ -260,12 +279,25 @@ body:hover #hud,#hud:focus-within{opacity:1}
   .cta{width:100%;justify-content:space-between;gap:14px;padding:16px 26px;font-size:20px}
   .cta .price{font-size:24px;padding-inline-start:16px}
   .cta-l small{font-size:13px;margin-top:4px}
+  /* slide 5 */
+  .cal{position:relative;right:auto;top:auto;width:auto;grid-template-columns:18px repeat(5,minmax(0,1fr)) repeat(2,minmax(0,.6fr));grid-template-rows:22px;grid-auto-rows:auto;gap:4px 3px}
+  .cal-h{padding:0;font-size:12px;text-align:center}
+  .cal-w{font-size:0}
+  .cal-w .latin{font-size:12px}
+  .cal-d{min-height:52px;align-items:center;justify-content:center;gap:4px;padding:6px 1px;border-radius:8px}
+  .cal-d.ses .cal-n{position:static}
+  .cal-n{font-size:12px}
+  .cal-d.we .cal-n{font-size:10px}
+  .cal-m{font-size:9.5px;padding:3px 4px;white-space:nowrap}
+  .cal-t{display:none}
+  .cal-key{position:relative;right:auto;bottom:auto;margin-top:18px;flex-wrap:wrap;gap:12px 22px;font-size:13px}
+  .cal-key i{width:20px;height:14px;border-radius:4px}
 }
 @media (prefers-reduced-motion:reduce){*{transition-duration:.01s!important}}
 </style>
 
 <div id="viewport"><div id="stage" dir="rtl">
-  <nav id="topnav" aria-label="ניווט"><a href="#" data-go="0">השינוי בשוק</a><a href="#" data-go="1">התפקיד</a><a href="#" data-go="2">הציפייה</a><a href="#" data-go="3">תכנית הליווי</a></nav>
+  <nav id="topnav" aria-label="ניווט"><a href="#" data-go="0">השינוי בשוק</a><a href="#" data-go="1">התפקיד</a><a href="#" data-go="2">הציפייה</a><a href="#" data-go="3">תכנית הליווי</a><a href="#" data-go="4">תאריכי מפגשים</a></nav>
 
   <!-- 1 · The curve -->
   <section class="slide night grain c1" data-steps="4">
@@ -379,6 +411,89 @@ body:hover #hud,#hud:focus-within{opacity:1}
         <a class="cta" id="buy" href="https://pay.grow.link/OTk1NDI~3a1cd4542bd5a539f97be7d56ca7795e-NDA5NTcxNA" target="_blank" rel="noopener"><span class="cta-l">להצטרפות לליווי<small>מתחילים ב־<bdi>8.11</bdi></small></span><span class="price"><bdi>₪5,040</bdi></span></a>
       </div>
     </div>
+  </section>
+
+  <!-- 5 · Session dates -->
+  <section class="slide dark-grad grain sessions" data-steps="0">
+    <div class="glow" style="left:1100px;top:-300px;width:980px;height:980px;background:radial-gradient(circle,rgba(86,81,237,.22) 0%,rgba(86,81,237,0) 62%)"></div>
+    <svg class="logo" viewBox="0 0 143 60" role="img" aria-label="else"><path d="M25.6459 49.102L25.6459 10.8981L28.6718 10.8981L28.6718 49.102L25.6459 49.102Z"/><path d="M9.9295 45.4826L35.7633 17.6715L37.9707 19.7412L12.1369 47.5522L9.9295 45.4826Z"/><path d="M0.000707546 28.2018L37.6235 28.2019L37.6235 31.2278L0.000707282 31.2278L0.000707546 28.2018Z"/><path d="M11.9621 11.3611L37.9651 39.0126L35.7688 41.0941L9.76577 13.4426L11.9621 11.3611Z"/><path d="M62.1376 46.4892C54.1643 46.4892 48.9304 41.9889 48.9304 33.8689C48.9304 26.287 54.1154 21.1997 62.0398 21.1997C69.5728 21.1997 74.709 25.3576 74.709 32.7438C74.709 33.6243 74.66 34.3091 74.5133 35.0429H53.8709C54.0665 39.7388 56.3656 42.2335 61.9909 42.2335C67.0781 42.2335 69.1815 40.5704 69.1815 37.6843V37.293H74.4644V37.7332C74.4644 42.9183 69.3771 46.4892 62.1376 46.4892ZM61.9419 25.3576C56.5612 25.3576 54.2133 27.7544 53.9198 32.1079H69.7195V32.0101C69.7195 27.5099 67.127 25.3576 61.9419 25.3576ZM83.9487 46H78.6658V13.2265H83.9487V46ZM100.336 46.4892C92.5093 46.4892 88.058 43.4075 88.058 37.7822V37.6354H93.3409V38.0267C93.3409 41.2063 95.2486 42.2335 100.336 42.2335C105.081 42.2335 106.499 41.2552 106.499 39.1029C106.499 37.0973 105.325 36.4614 101.852 35.9723L95.1997 35.0918C90.6016 34.5048 87.8134 32.5482 87.8134 28.4882C87.8134 24.2325 91.6777 21.1997 99.1618 21.1997C106.597 21.1997 111.097 24.1836 111.097 29.9556V30.1024H105.863V29.8089C105.863 26.9229 104.396 25.4065 99.0151 25.4065C94.5638 25.4065 92.9985 26.3848 92.9985 28.6838C92.9985 30.5915 93.9768 31.2764 97.6455 31.7655L103.271 32.5482C109.043 33.2819 111.684 35.2385 111.684 39.2496C111.684 43.7988 107.184 46.4892 100.336 46.4892ZM127.725 46.4892C119.752 46.4892 114.518 41.9889 114.518 33.8689C114.518 26.287 119.703 21.1997 127.627 21.1997C135.16 21.1997 140.296 25.3576 140.296 32.7438C140.296 33.6243 140.247 34.3091 140.1 35.0429H119.458C119.654 39.7388 121.953 42.2335 127.578 42.2335C132.665 42.2335 134.769 40.5704 134.769 37.6843V37.293H140.052V37.7332C140.052 42.9183 134.964 46.4892 127.725 46.4892ZM127.529 25.3576C122.148 25.3576 119.8 27.7544 119.507 32.1079H135.307V32.0101C135.307 27.5099 132.714 25.3576 127.529 25.3576Z"/></svg>
+    <h1 class="title">תאריכי המפגשים · נובמבר–דצמבר <bdi>2026</bdi></h1>
+    <div class="cal" id="cal">
+      <span class="cal-h"></span>
+      <span class="cal-h">א׳</span>
+      <span class="cal-h">ב׳</span>
+      <span class="cal-h">ג׳</span>
+      <span class="cal-h">ד׳</span>
+      <span class="cal-h">ה׳</span>
+      <span class="cal-h">ו׳</span>
+      <span class="cal-h">ש׳</span>
+      <b class="cal-w">שבוע <span class="latin">01</span></b>
+      <div class="cal-d ses"><span class="cal-n latin">8.11</span><i class="cal-m">מפגש 1</i><span class="cal-t">סט־אפ</span></div>
+      <div class="cal-d"><span class="cal-n latin">9.11</span></div>
+      <div class="cal-d"><span class="cal-n latin">10.11</span></div>
+      <div class="cal-d ses one"><span class="cal-n latin">11.11</span><i class="cal-m">מפגש 2</i><span class="cal-t">אסטרטגיה אישית <bdi>1:1</bdi></span></div>
+      <div class="cal-d"><span class="cal-n latin">12.11</span></div>
+      <div class="cal-d we"><span class="cal-n latin">13.11</span></div>
+      <div class="cal-d we"><span class="cal-n latin">14.11</span></div>
+      <b class="cal-w">שבוע <span class="latin">02</span></b>
+      <div class="cal-d"><span class="cal-n latin">15.11</span></div>
+      <div class="cal-d ses"><span class="cal-n latin">16.11</span><i class="cal-m">מפגש 3</i><span class="cal-t">הבנת שפה מוצרית</span></div>
+      <div class="cal-d"><span class="cal-n latin">17.11</span></div>
+      <div class="cal-d"><span class="cal-n latin">18.11</span></div>
+      <div class="cal-d"><span class="cal-n latin">19.11</span></div>
+      <div class="cal-d we"><span class="cal-n latin">20.11</span></div>
+      <div class="cal-d we"><span class="cal-n latin">21.11</span></div>
+      <b class="cal-w">שבוע <span class="latin">03</span></b>
+      <div class="cal-d"><span class="cal-n latin">22.11</span></div>
+      <div class="cal-d ses"><span class="cal-n latin">23.11</span><i class="cal-m">מפגש 4</i><span class="cal-t">תהליכי איפיון אייג׳נטיים</span></div>
+      <div class="cal-d"><span class="cal-n latin">24.11</span></div>
+      <div class="cal-d ses"><span class="cal-n latin">25.11</span><i class="cal-m">מפגש 5</i><span class="cal-t">תרגול קבוצתי</span></div>
+      <div class="cal-d"><span class="cal-n latin">26.11</span></div>
+      <div class="cal-d we"><span class="cal-n latin">27.11</span></div>
+      <div class="cal-d we"><span class="cal-n latin">28.11</span></div>
+      <b class="cal-w">שבוע <span class="latin">04</span></b>
+      <div class="cal-d"><span class="cal-n latin">29.11</span></div>
+      <div class="cal-d ses"><span class="cal-n latin">30.11</span><i class="cal-m">מפגש 6</i><span class="cal-t">יסודות עיצוביים בעיצוב מוצר</span></div>
+      <div class="cal-d"><span class="cal-n latin">1.12</span></div>
+      <div class="cal-d"><span class="cal-n latin">2.12</span></div>
+      <div class="cal-d"><span class="cal-n latin">3.12</span></div>
+      <div class="cal-d we"><span class="cal-n latin">4.12</span></div>
+      <div class="cal-d we"><span class="cal-n latin">5.12</span></div>
+      <b class="cal-w">שבוע <span class="latin">05</span></b>
+      <div class="cal-d"><span class="cal-n latin">6.12</span></div>
+      <div class="cal-d ses"><span class="cal-n latin">7.12</span><i class="cal-m">מפגש 7</i><span class="cal-t">שיקול דעת בג׳ינרוט אייג׳נטי</span></div>
+      <div class="cal-d"><span class="cal-n latin">8.12</span></div>
+      <div class="cal-d ses"><span class="cal-n latin">9.12</span><i class="cal-m">מפגש 8</i><span class="cal-t">תרגול קבוצתי</span></div>
+      <div class="cal-d"><span class="cal-n latin">10.12</span></div>
+      <div class="cal-d we"><span class="cal-n latin">11.12</span></div>
+      <div class="cal-d we"><span class="cal-n latin">12.12</span></div>
+      <b class="cal-w">שבוע <span class="latin">06</span></b>
+      <div class="cal-d"><span class="cal-n latin">13.12</span></div>
+      <div class="cal-d ses"><span class="cal-n latin">14.12</span><i class="cal-m">מפגש 9</i><span class="cal-t">עבודה משוכפלת ומשולשת</span></div>
+      <div class="cal-d"><span class="cal-n latin">15.12</span></div>
+      <div class="cal-d ses one"><span class="cal-n latin">16.12</span><i class="cal-m">מפגש 10</i><span class="cal-t">מעקב אישי <bdi>1:1</bdi></span></div>
+      <div class="cal-d"><span class="cal-n latin">17.12</span></div>
+      <div class="cal-d we"><span class="cal-n latin">18.12</span></div>
+      <div class="cal-d we"><span class="cal-n latin">19.12</span></div>
+      <b class="cal-w">שבוע <span class="latin">07</span></b>
+      <div class="cal-d"><span class="cal-n latin">20.12</span></div>
+      <div class="cal-d ses"><span class="cal-n latin">21.12</span><i class="cal-m">מפגש 11</i><span class="cal-t">תיק עבודות שנגזר מהעבודה</span></div>
+      <div class="cal-d"><span class="cal-n latin">22.12</span></div>
+      <div class="cal-d ses"><span class="cal-n latin">23.12</span><i class="cal-m">מפגש 12</i><span class="cal-t">תרגול קבוצתי</span></div>
+      <div class="cal-d"><span class="cal-n latin">24.12</span></div>
+      <div class="cal-d we"><span class="cal-n latin">25.12</span></div>
+      <div class="cal-d we"><span class="cal-n latin">26.12</span></div>
+      <b class="cal-w">שבוע <span class="latin">08</span></b>
+      <div class="cal-d"><span class="cal-n latin">27.12</span></div>
+      <div class="cal-d ses"><span class="cal-n latin">28.12</span><i class="cal-m">מפגש 13</i><span class="cal-t">קריירה בעידן ה־<bdi>AI</bdi></span></div>
+      <div class="cal-d"><span class="cal-n latin">29.12</span></div>
+      <div class="cal-d"><span class="cal-n latin">30.12</span></div>
+      <div class="cal-d"><span class="cal-n latin">31.12</span></div>
+      <div class="cal-d we"><span class="cal-n latin">1.1</span></div>
+      <div class="cal-d we"><span class="cal-n latin">2.1</span></div>
+    </div>
+
+    <p class="cal-key"><span><i></i>מפגש קבוצתי</span><span><i class="one"></i>מפגש אישי <bdi>1:1</bdi></span><span>פותחים ביום ראשון <bdi>8.11</bdi> וממשיכים בימי שני ורביעי</span></p>
   </section>
 
 </div></div>
