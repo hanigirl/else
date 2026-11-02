@@ -24,10 +24,14 @@ const nextConfig: NextConfig = {
   basePath: BASE_PATH,
   env: { NEXT_PUBLIC_BASE_PATH: BASE_PATH },
   async rewrites() {
-    const rewrites: Array<{ source: string; destination: string }> = [
+    // Internal rewrites (within basePath /learnuiux)
+    const internalRewrites = [
       // the else deck / offer page is a static HTML file in public/offer
       { source: "/offer", destination: "/offer/index.html" },
     ];
+
+    // External rewrites (at domain root, bypassing basePath)
+    const externalRewrites: Array<{ source: string; destination: string; basePath: false }> = [];
 
     // Proxy Framer pages from uxtra.co.il (now on Framer) to weareelse.co.il
     // These must proxy to the Framer project's default domain, NOT uxtra.co.il
@@ -50,35 +54,46 @@ const nextConfig: NextConfig = {
       ];
 
       framerPaths.forEach((path) => {
-        rewrites.push({
+        externalRewrites.push({
           source: path,
           destination: `${FRAMER_ORIGIN}${path}`,
+          basePath: false,
         });
       });
 
       // Proxy Framer assets (CSS, JS, images, fonts, etc.)
-      // Framer typically serves assets from /_next/static/, /assets/, or root-level paths
-      rewrites.push(
+      externalRewrites.push(
         {
           source: "/_framer/:path*",
           destination: `${FRAMER_ORIGIN}/_framer/:path*`,
+          basePath: false,
         },
         {
           source: "/framerusercontent.com/:path*",
           destination: `https://framerusercontent.com/:path*`,
+          basePath: false,
         }
       );
     }
 
     // Proxy design-to-code workshop site
     if (DESIGN_TO_CODE_ORIGIN) {
-      rewrites.push({
+      externalRewrites.push({
+        source: "/workshops/design-to-code",
+        destination: `${DESIGN_TO_CODE_ORIGIN}/workshops/design-to-code`,
+        basePath: false,
+      });
+      externalRewrites.push({
         source: "/workshops/design-to-code/:path*",
         destination: `${DESIGN_TO_CODE_ORIGIN}/workshops/design-to-code/:path*`,
+        basePath: false,
       });
     }
 
-    return rewrites;
+    return {
+      beforeFiles: externalRewrites,
+      afterFiles: internalRewrites,
+    };
   },
   async redirects() {
     // the bare domain forwards to the course page (until weareelse.co.il has a home of its own)
