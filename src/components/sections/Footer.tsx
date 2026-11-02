@@ -12,11 +12,11 @@ const SOCIAL = {
   linkedin: "https://www.linkedin.com/in/hani-buskila-24780028/",
   youtube: "https://www.youtube.com/@hanibuskila",
   newsletter: "https://www.uxtra.co.il",
-  figmaFlow: "https://uxtra.co.il/courses/figma-flow",
-  designToCode: "https://uxtra.co.il/workshops/design-to-code",
+  figmaFlow: "/courses/figma-flow",
+  designToCode: "/workshops/design-to-code",
   figmaWorkshop: whatsapp("הי חני, הגעתי מהאתר שלך אני מתעניינ/ת בסדנת פיגמה לחברה"),
-  privacy: "https://uxtra.co.il/privacy",
-  terms: "https://uxtra.co.il/terms-and-conditions",
+  privacy: "/privacy",
+  terms: "/terms-and-conditions",
   aiWorkshop: whatsapp("הי חני, הגעתי מהאתר שלך אני מתעניינ/ת בסדנת AI לחברה"),
 };
 

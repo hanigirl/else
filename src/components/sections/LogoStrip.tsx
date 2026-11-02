@@ -3,8 +3,8 @@ import { asset } from "@/lib/asset";
 
 /**
  * Section 3 — the client / partner logo strip, as an endless marquee sliding
- * left. Logos come from uxtra.co.il (Hani's section), recoloured #B1BBC7, and
- * are used as masks so they all take one colour: --color-logo (tokens.css).
+ * left. Logos are recoloured #B1BBC7 and used as masks so they all take one
+ * colour: --color-logo (tokens.css).
  * `w` = the logo's width at 1920 (before SIZE), `ratio` = width / height.
  */
 const logos: { file: string; alt: string; w: number; ratio: number }[] = [
