@@ -23,6 +23,19 @@ const nextConfig: NextConfig = {
   devIndicators: false,
   basePath: BASE_PATH,
   env: { NEXT_PUBLIC_BASE_PATH: BASE_PATH },
+  async headers() {
+    return [
+      {
+        source: "/r/:path*",
+        headers: [
+          {
+            key: "X-Robots-Tag",
+            value: "noindex",
+          },
+        ],
+      },
+    ];
+  },
   async rewrites() {
     // Internal rewrites (within basePath /learnuiux)
     const internalRewrites = [
