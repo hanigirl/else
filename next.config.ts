@@ -5,19 +5,18 @@ const BASE_PATH = "/learnuiux";
 
 /**
  * Framer origin for proxying uxtra.co.il pages.
- * TODO: Set FRAMER_ORIGIN in environment to the actual Framer default domain
- * (*.framer.website or *.framer.app) for project 4TjPrHpPozuW6EgtpfQaKY.
+ * Default: https://adored-look-881750.framer.app (Framer project 4TjPrHpPozuW6EgtpfQaKY)
  * This cannot point to uxtra.co.il (would create a redirect loop after DNS switch).
+ * Override via FRAMER_ORIGIN environment variable if needed.
  */
-const FRAMER_ORIGIN = process.env.FRAMER_ORIGIN || "https://FRAMER-ORIGIN-NOT-SET.example";
+const FRAMER_ORIGIN = process.env.FRAMER_ORIGIN || "https://adored-look-881750.framer.app";
 
 /**
  * Design-to-code workshop site origin.
- * TODO: Set DESIGN_TO_CODE_ORIGIN in environment to the actual Vercel deployment URL
- * for the design-to-code Next.js app (likely hanigirl/design-to-code-site or
- * danielboaron23/design-to-code-site).
+ * Default: https://design-to-code-site-two.vercel.app
+ * Override via DESIGN_TO_CODE_ORIGIN environment variable if needed.
  */
-const DESIGN_TO_CODE_ORIGIN = process.env.DESIGN_TO_CODE_ORIGIN || "";
+const DESIGN_TO_CODE_ORIGIN = process.env.DESIGN_TO_CODE_ORIGIN || "https://design-to-code-site-two.vercel.app";
 
 const nextConfig: NextConfig = {
   poweredByHeader: false,
@@ -33,7 +32,7 @@ const nextConfig: NextConfig = {
     // Proxy Framer pages from uxtra.co.il (now on Framer) to weareelse.co.il
     // These must proxy to the Framer project's default domain, NOT uxtra.co.il
     // (after DNS switch, uxtra.co.il will 301 redirect here → loop prevention)
-    if (FRAMER_ORIGIN && FRAMER_ORIGIN !== "https://FRAMER-ORIGIN-NOT-SET.example") {
+    if (FRAMER_ORIGIN) {
       const framerPaths = [
         "/courses/figma-flow",
         "/courses/figma-flow/thank-you",
