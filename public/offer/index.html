@@ -566,6 +566,11 @@ body:hover #hud,#hud:focus-within{opacity:1}
     DEADLINE=new Date("2026-11-02T23:59:00+02:00").getTime();
     document.getElementById("coupon").textContent="timeToShine4";
   }
+  // ?round=5 runs to Fri 6.11 23:59 with coupon timeToShine5.
+  if(qs.get("round")==="5"){
+    DEADLINE=new Date("2026-11-06T23:59:00+02:00").getTime();
+    document.getElementById("coupon").textContent="timeToShine5";
+  }
   var tH=document.getElementById("tH"),tM=document.getElementById("tM"),tS=document.getElementById("tS"),tBox=document.getElementById("timer");
   function pad(n){return (n<10?"0":"")+n}
   function tickTimer(){var d=Math.max(0,Math.floor((DEADLINE-Date.now())/1000));
