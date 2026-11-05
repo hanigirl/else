@@ -49,9 +49,9 @@ const nextConfig: NextConfig = {
     // Proxy Framer pages from uxtra.co.il (now on Framer) to weareelse.co.il
     // These must proxy to the Framer project's default domain, NOT uxtra.co.il
     // (after DNS switch, uxtra.co.il will 301 redirect here → loop prevention)
+    // Homepage is now native (public/index.html), not proxied
     if (FRAMER_ORIGIN) {
       const framerPaths = [
-        "/", // Framer homepage with logo + Brevo signup form
         "/courses/figma-flow",
         "/courses/figma-flow/thank-you",
         "/courses/figma-flow/approved-for-updates",
