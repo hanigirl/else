@@ -49,6 +49,7 @@ const nextConfig: NextConfig = {
     // Proxy Framer pages from uxtra.co.il (now on Framer) to weareelse.co.il
     // These must proxy to the Framer project's default domain, NOT uxtra.co.il
     // (after DNS switch, uxtra.co.il will 301 redirect here → loop prevention)
+    // Homepage is now native (public/index.html), not proxied
     if (FRAMER_ORIGIN) {
       const framerPaths = [
         "/courses/figma-flow",
@@ -109,8 +110,8 @@ const nextConfig: NextConfig = {
     };
   },
   async redirects() {
-    // the bare domain forwards to the course page (until weareelse.co.il has a home of its own)
-    return [{ source: "/", destination: BASE_PATH, basePath: false, permanent: false }];
+    // No redirects at root level — homepage is now proxied from Framer
+    return [];
   },
 };
 
