@@ -4,7 +4,7 @@
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <title>else</title>
-  <meta name="description" content="AI can make anything. We make something else.">
+  <meta name="description" content="הצטרפו למעצבי העל של העולם החדש">
   
   <link rel="icon" type="image/svg+xml" href="/icons/icon.svg">
   <link rel="icon" type="image/png" sizes="32x32" href="/icons/favicon.ico">
@@ -27,19 +27,12 @@
       font-weight: 500;
       font-display: swap;
     }
-    @font-face {
-      font-family: "Clash Display";
-      src: url("/assets/fonts/clash-display-600.woff2") format("woff2");
-      font-weight: 600;
-      font-display: swap;
-    }
 
     :root {
       --color-indigo: #5651ed;
       --color-navy: #1a237e;
       --color-cobalt: #4a7af7;
       --color-white: #ffffff;
-      --color-mist: #eff2fc;
       --color-error: #d92d2d;
       --color-success: #069561;
       --color-success-soft: #d5fdee;
@@ -119,43 +112,19 @@
       min-height: 100vh;
       display: flex;
       flex-direction: column;
-    }
-
-    header {
-      padding-top: clamp(24px, 4.17vw, 80px);
-      padding-bottom: clamp(20px, 3vw, 40px);
-    }
-
-    .logo-wrapper {
-      display: inline-block;
-      position: relative;
-    }
-
-    .logo-img {
-      width: clamp(120px, 14vw, 200px);
-      height: auto;
-      filter: brightness(0) invert(1);
-    }
-
-    main {
-      flex: 1;
-      display: flex;
-      flex-direction: column;
-      align-items: center;
-      justify-content: center;
-      padding: clamp(3rem, 6vw, 6rem) 0;
-      position: relative;
+      padding-top: clamp(40px, 6vw, 80px);
+      padding-bottom: clamp(40px, 6vw, 80px);
     }
 
     .blur-star {
-      position: absolute;
+      position: fixed;
       width: clamp(300px, 40vw, 600px);
       height: clamp(300px, 40vw, 600px);
       top: 50%;
       left: 50%;
       transform: translate(-50%, -50%);
       pointer-events: none;
-      z-index: -1;
+      z-index: 0;
     }
 
     .blur-star::before {
@@ -189,32 +158,60 @@
       50% { opacity: 0.8; transform: scale(1.05); }
     }
 
-    .content-box {
+    main {
+      flex: 1;
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      justify-content: center;
       position: relative;
       z-index: 1;
       max-width: 640px;
+      margin: 0 auto;
       width: 100%;
-      text-align: center;
     }
 
-    .tagline {
-      font-family: var(--font-en);
-      font-weight: 500;
-      font-size: clamp(24px, 3vw, 36px);
-      line-height: 1.25;
+    .logo-img {
+      width: clamp(60px, 7vw, 100px);
+      height: auto;
+      filter: brightness(0) invert(1);
+      margin-bottom: clamp(2rem, 4vw, 3rem);
+    }
+
+    .headline {
+      font-family: var(--font-he);
+      font-weight: 700;
+      font-size: clamp(28px, 4vw, 44px);
+      line-height: 1.3;
       text-align: center;
-      margin-bottom: clamp(3rem, 6vw, 5rem);
+      margin-bottom: clamp(3rem, 6vw, 4rem);
       color: var(--color-white);
     }
 
     .signup-box {
       width: 100%;
-      max-width: 480px;
-      margin: 0 auto;
+      max-width: 520px;
+    }
+
+    .form-row {
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      gap: 1rem;
+      margin-bottom: 1rem;
+    }
+
+    @media (max-width: 767px) {
+      .form-row {
+        grid-template-columns: 1fr;
+      }
     }
 
     .form-group {
       margin-bottom: 1rem;
+    }
+
+    .form-row .form-group {
+      margin-bottom: 0;
     }
 
     .field-label {
@@ -225,10 +222,9 @@
       line-height: 1.4;
       margin-bottom: 8px;
       color: rgba(255, 255, 255, 0.95);
-      text-align: right;
     }
 
-    .email-input {
+    .field-input {
       width: 100%;
       padding: 16px 20px;
       font-family: var(--font-he);
@@ -245,28 +241,104 @@
       backdrop-filter: blur(10px);
     }
 
-    .email-input:focus {
+    .field-input:focus {
       outline: none;
       background: var(--color-white);
       border-color: rgba(255, 255, 255, 0.5);
       box-shadow: 0 6px 24px rgba(0, 0, 0, 0.2), 0 0 0 1px rgba(255, 255, 255, 0.3);
     }
 
-    .email-input::placeholder {
+    .field-input::placeholder {
       color: rgba(56, 56, 69, 0.4);
     }
 
-    .email-input[aria-invalid="true"] {
+    .field-input[aria-invalid="true"] {
       border-color: var(--color-error);
       box-shadow: 0 4px 16px rgba(217, 45, 45, 0.2);
     }
 
+    .field-input[type="email"] {
+      direction: ltr;
+      text-align: left;
+    }
+
+    .consent-group {
+      margin-bottom: 1.5rem;
+      display: flex;
+      align-items: flex-start;
+      gap: 12px;
+    }
+
+    .checkbox {
+      appearance: none;
+      flex-shrink: 0;
+      width: 20px;
+      height: 20px;
+      margin-top: 2px;
+      border: 2px solid rgba(255, 255, 255, 0.6);
+      border-radius: 4px;
+      background: transparent;
+      cursor: pointer;
+      transition: all var(--dur-fast) var(--ease-out);
+      position: relative;
+    }
+
+    .checkbox:hover {
+      border-color: rgba(255, 255, 255, 0.9);
+      background: rgba(255, 255, 255, 0.1);
+    }
+
+    .checkbox:checked {
+      border-color: var(--color-white);
+      background: var(--color-white);
+    }
+
+    .checkbox:checked::after {
+      content: "";
+      position: absolute;
+      left: 5px;
+      top: 1px;
+      width: 6px;
+      height: 11px;
+      border: solid var(--color-navy);
+      border-width: 0 2.5px 2.5px 0;
+      transform: rotate(45deg);
+    }
+
+    .checkbox:focus-visible {
+      outline: 2px solid rgba(255, 255, 255, 0.8);
+      outline-offset: 2px;
+    }
+
+    .checkbox[aria-invalid="true"] {
+      border-color: var(--color-error);
+    }
+
+    .consent-label {
+      font-family: var(--font-he);
+      font-size: 15px;
+      font-weight: 400;
+      line-height: 1.5;
+      color: rgba(255, 255, 255, 0.9);
+    }
+
+    .consent-label a {
+      color: var(--color-white);
+      text-decoration: underline;
+      text-decoration-color: rgba(255, 255, 255, 0.5);
+      transition: text-decoration-color var(--dur-base) var(--ease-out);
+    }
+
+    .consent-label a:hover {
+      text-decoration-color: var(--color-white);
+    }
+
     .submit-btn {
       width: 100%;
-      padding: 16px 20px;
+      padding: 18px 24px;
       font-family: var(--font-he);
-      font-size: 16px;
-      font-weight: 600;
+      font-size: 18px;
+      font-weight: 700;
       line-height: 1.4;
       color: var(--color-white);
       background: var(--color-indigo);
@@ -317,43 +389,22 @@
       box-shadow: 0 2px 12px rgba(217, 45, 45, 0.2);
     }
 
-    .privacy-link {
-      margin-top: clamp(2rem, 4vw, 3rem);
-      text-align: center;
-    }
-
-    .privacy-link a {
-      font-family: var(--font-he);
-      font-size: 15px;
-      font-weight: 500;
-      color: rgba(255, 255, 255, 0.85);
-      text-decoration: none;
-      transition: color var(--dur-base) var(--ease-out);
-      border-bottom: 1px solid rgba(255, 255, 255, 0.3);
-    }
-
-    .privacy-link a:hover {
-      color: var(--color-white);
-      border-bottom-color: rgba(255, 255, 255, 0.6);
-    }
-
     footer {
-      padding: clamp(2rem, 4vw, 3rem) 0;
       text-align: center;
+      margin-top: clamp(2rem, 4vw, 3rem);
     }
 
     .footer-text {
       font-family: var(--font-en);
-      font-size: 14px;
+      font-size: 13px;
       font-weight: 400;
       letter-spacing: 0.02em;
       color: rgba(255, 255, 255, 0.5);
     }
 
     @media (max-width: 767px) {
-      .tagline {
-        font-size: clamp(20px, 5vw, 24px);
-        margin-bottom: 2.5rem;
+      .headline {
+        font-size: clamp(24px, 6vw, 28px);
       }
 
       .blur-star {
@@ -371,45 +422,85 @@
   </style>
 </head>
 <body>
+  <div class="blur-star" aria-hidden="true"></div>
+
   <div class="container">
-    <header>
-      <div class="logo-wrapper">
-        <img src="/assets/logo.svg" alt="else" class="logo-img">
-      </div>
-    </header>
-
     <main>
-      <div class="blur-star" aria-hidden="true"></div>
+      <img src="/assets/logo.svg" alt="else" class="logo-img">
 
-      <div class="content-box">
-        <h1 class="tagline" lang="en">
-          AI can make anything.<br>We make something else.
-        </h1>
+      <h1 class="headline">
+        הצטרפו למעצבי העל של העולם החדש
+      </h1>
 
-        <div class="signup-box">
-          <form id="signupForm">
+      <div class="signup-box">
+        <form id="signupForm" novalidate>
+          <div class="form-group">
+            <label for="email" class="field-label">כתובת מייל</label>
+            <input 
+              type="email" 
+              id="email" 
+              class="field-input" 
+              placeholder="name@example.com"
+              required
+              autocomplete="email"
+            >
+          </div>
+
+          <div class="form-row">
             <div class="form-group">
-              <label for="email" class="field-label">כתובת מייל</label>
+              <label for="firstName" class="field-label">שם פרטי</label>
               <input 
-                type="email" 
-                id="email" 
-                class="email-input" 
-                placeholder="name@example.com"
+                type="text" 
+                id="firstName" 
+                class="field-input" 
+                placeholder="שם פרטי"
                 required
-                autocomplete="email"
-                dir="ltr"
+                autocomplete="given-name"
               >
             </div>
-            <button type="submit" class="submit-btn" id="submitBtn">
-              הצטרפות לרשימת התפוצה
-            </button>
-            <div id="message"></div>
-          </form>
 
-          <div class="privacy-link">
-            <a href="/privacy">מדיניות פרטיות</a>
+            <div class="form-group">
+              <label for="lastName" class="field-label">שם משפחה</label>
+              <input 
+                type="text" 
+                id="lastName" 
+                class="field-input" 
+                placeholder="שם משפחה"
+                required
+                autocomplete="family-name"
+              >
+            </div>
           </div>
-        </div>
+
+          <div class="form-group">
+            <label for="phone" class="field-label">טלפון (אופציונלי)</label>
+            <input 
+              type="tel" 
+              id="phone" 
+              class="field-input" 
+              placeholder="050-1234567"
+              autocomplete="tel"
+            >
+          </div>
+
+          <div class="consent-group">
+            <input 
+              type="checkbox" 
+              id="consent" 
+              class="checkbox"
+              required
+            >
+            <label for="consent" class="consent-label">
+              בהצטרפות אני מאשר/ת את <a href="/terms-and-conditions" target="_blank">התקנון</a> ואת <a href="/privacy" target="_blank">מדיניות הפרטיות</a>
+            </label>
+          </div>
+
+          <button type="submit" class="submit-btn" id="submitBtn">
+            חני, צרפי אותי!
+          </button>
+
+          <div id="message"></div>
+        </form>
       </div>
     </main>
 
@@ -421,46 +512,82 @@
   <script>
     const form = document.getElementById('signupForm');
     const emailInput = document.getElementById('email');
+    const firstNameInput = document.getElementById('firstName');
+    const lastNameInput = document.getElementById('lastName');
+    const phoneInput = document.getElementById('phone');
+    const consentCheckbox = document.getElementById('consent');
     const submitBtn = document.getElementById('submitBtn');
     const messageDiv = document.getElementById('message');
 
     form.addEventListener('submit', async (e) => {
       e.preventDefault();
       
-      const email = emailInput.value.trim();
-      if (!email) return;
-
-      submitBtn.disabled = true;
-      submitBtn.textContent = 'שולח...';
+      // Clear previous errors
+      [emailInput, firstNameInput, lastNameInput, consentCheckbox].forEach(el => {
+        el.removeAttribute('aria-invalid');
+      });
       messageDiv.textContent = '';
       messageDiv.className = 'message';
-      emailInput.removeAttribute('aria-invalid');
+
+      // Client-side validation
+      let hasError = false;
+
+      if (!emailInput.value.trim() || !emailInput.validity.valid) {
+        emailInput.setAttribute('aria-invalid', 'true');
+        hasError = true;
+      }
+
+      if (!firstNameInput.value.trim()) {
+        firstNameInput.setAttribute('aria-invalid', 'true');
+        hasError = true;
+      }
+
+      if (!lastNameInput.value.trim()) {
+        lastNameInput.setAttribute('aria-invalid', 'true');
+        hasError = true;
+      }
+
+      if (!consentCheckbox.checked) {
+        consentCheckbox.setAttribute('aria-invalid', 'true');
+        messageDiv.textContent = 'יש לאשר את התקנון ומדיניות הפרטיות';
+        messageDiv.className = 'message error';
+        hasError = true;
+      }
+
+      if (hasError) return;
+
+      // Submit
+      submitBtn.disabled = true;
+      submitBtn.textContent = 'שולח...';
 
       try {
         const response = await fetch('/api/subscribe', {
           method: 'POST',
           headers: { 'Content-Type': 'application/json' },
-          body: JSON.stringify({ email })
+          body: JSON.stringify({
+            email: emailInput.value.trim(),
+            firstName: firstNameInput.value.trim(),
+            lastName: lastNameInput.value.trim(),
+            phone: phoneInput.value.trim() || undefined
+          })
         });
 
         const data = await response.json();
 
         if (response.ok) {
-          messageDiv.textContent = 'תודה! נרשמת בהצלחה לרשימת התפוצה ✓';
+          messageDiv.textContent = 'תודה! נרשמת בהצלחה ✓';
           messageDiv.className = 'message success';
-          emailInput.value = '';
+          form.reset();
         } else {
           messageDiv.textContent = data.error || 'משהו השתבש. אנא נסו שוב.';
           messageDiv.className = 'message error';
-          emailInput.setAttribute('aria-invalid', 'true');
         }
       } catch (error) {
         messageDiv.textContent = 'שגיאת תקשורת. אנא בדקו את החיבור לאינטרנט ונסו שוב.';
         messageDiv.className = 'message error';
-        emailInput.setAttribute('aria-invalid', 'true');
       } finally {
         submitBtn.disabled = false;
-        submitBtn.textContent = 'הצטרפות לרשימת התפוצה';
+        submitBtn.textContent = 'חני, צרפי אותי!';
       }
     });
   </script>
