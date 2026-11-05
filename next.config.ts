@@ -51,6 +51,7 @@ const nextConfig: NextConfig = {
     // (after DNS switch, uxtra.co.il will 301 redirect here → loop prevention)
     if (FRAMER_ORIGIN) {
       const framerPaths = [
+        "/", // Framer homepage with logo + Brevo signup form
         "/courses/figma-flow",
         "/courses/figma-flow/thank-you",
         "/courses/figma-flow/approved-for-updates",
@@ -109,8 +110,8 @@ const nextConfig: NextConfig = {
     };
   },
   async redirects() {
-    // the bare domain forwards to the course page (until weareelse.co.il has a home of its own)
-    return [{ source: "/", destination: BASE_PATH, basePath: false, permanent: false }];
+    // No redirects at root level — homepage is now proxied from Framer
+    return [];
   },
 };
 
