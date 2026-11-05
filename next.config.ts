@@ -49,10 +49,9 @@ const nextConfig: NextConfig = {
     // Proxy Framer pages from uxtra.co.il (now on Framer) to weareelse.co.il
     // These must proxy to the Framer project's default domain, NOT uxtra.co.il
     // (after DNS switch, uxtra.co.il will 301 redirect here → loop prevention)
-    // Note: /courses/figma-flow is handled by middleware.ts to override metadata
     if (FRAMER_ORIGIN) {
       const framerPaths = [
-        // "/courses/figma-flow", // Handled by middleware to set correct title: "Figma Flow — ELSE"
+        "/courses/figma-flow",
         "/courses/figma-flow/thank-you",
         "/courses/figma-flow/approved-for-updates",
         "/courses/figma-flow-offer",
