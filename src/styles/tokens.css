@@ -29,6 +29,18 @@
   font-weight: 400;
   font-display: swap;
 }
+@font-face {
+  font-family: "Discovery Fs";
+  src: url("../fonts/discovery-fs-400.woff2") format("woff2");
+  font-weight: 400;
+  font-display: swap;
+}
+@font-face {
+  font-family: "Discovery Fs";
+  src: url("../fonts/discovery-fs-600.woff2") format("woff2");
+  font-weight: 600;
+  font-display: swap;
+}
 
 /* static: emit every token even if no utility uses it — shapes read them via var() */
 @theme static {
@@ -66,6 +78,7 @@
   --font-he: var(--font-noto-hebrew), "Noto Sans Hebrew", system-ui, sans-serif;
   --font-en: "Clash Display", var(--font-noto-hebrew), system-ui, sans-serif;
   --font-pixel: "Minecraft", ui-monospace, monospace;
+  --font-discovery: "Discovery Fs", var(--font-he);
 
   /* ---------- Spacing (4-based, plus the values the file actually uses) ---------- */
   --spacing: 4px;

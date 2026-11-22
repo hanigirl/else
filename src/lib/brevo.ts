@@ -117,6 +117,45 @@ export async function addLeadToList(lead: Lead) {
   }
 }
 
+// List 5 in the UXtra account: "רשימה ראשית" — the main newsletter list.
+const NEWSLETTER_LIST_ID = Number(process.env.BREVO_NEWSLETTER_LIST_ID ?? 5);
+
+export type Subscriber = {
+  firstName: string;
+  lastName?: string;
+  email: string;
+  phone?: string;
+  utm?: { source?: string; medium?: string; campaign?: string };
+};
+
+/** A newsletter signup from the home page (wearels.co.il) → the main list. */
+export async function addSubscriberToNewsletter(sub: Subscriber) {
+  const fullName = [sub.firstName, sub.lastName].filter(Boolean).join(" ").trim();
+
+  const attributes: Attributes = {
+    FIRSTNAME: sub.firstName,
+    PRIVACY: true,
+  };
+  if (sub.lastName) attributes.LASTNAME = sub.lastName;
+  if (fullName) attributes.FULL_NAME = fullName;
+  if (sub.phone) attributes.PHONE = sub.phone;
+  if (sub.utm?.source) attributes.UTM_SOURCE = sub.utm.source;
+  if (sub.utm?.medium) attributes.UTM_MEDIUM = sub.utm.medium;
+  if (sub.utm?.campaign) attributes.UTM_CAMPAIGN = sub.utm.campaign;
+
+  const sms = sub.phone ? toE164(sub.phone) : null;
+  try {
+    await upsert(sub.email, sms ? { ...attributes, SMS: sms } : attributes, NEWSLETTER_LIST_ID);
+  } catch (err) {
+    // same rule as the lead form: a number Brevo won't take as SMS must not cost
+    // us the subscriber — save them with the raw PHONE attribute only.
+    const message = err instanceof Error ? err.message : String(err);
+    if (!sms || !message.startsWith("Brevo 400")) throw err;
+    console.warn("[brevo] saving subscriber without SMS:", message);
+    await upsert(sub.email, attributes, NEWSLETTER_LIST_ID);
+  }
+}
+
 /**
  * The confirmation email every form sender gets — sent from here, not from a
  * Brevo automation on the list, because the list also holds people who never

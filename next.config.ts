@@ -63,7 +63,6 @@ const nextConfig: NextConfig = {
         "/thank-you",
         "/quiz/quiz-1",
         "/terms-and-conditions",
-        "/privacy",
       ];
 
       framerPaths.forEach((path) => {
@@ -109,8 +108,10 @@ const nextConfig: NextConfig = {
     };
   },
   async redirects() {
-    // the bare domain forwards to the course page (until weareelse.co.il has a home of its own)
-    return [{ source: "/", destination: BASE_PATH, basePath: false, permanent: false }];
+    // the bare domain now has a home of its own — the newsletter signup page.
+    // The true root (/) is served by the vercel.json rewrite → /learnuiux/newsletter,
+    // so it no longer forwards to the course page.
+    return [];
   },
 };
 
