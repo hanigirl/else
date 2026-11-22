@@ -5,6 +5,14 @@
   "buildCommand": "next build",
   "rewrites": [
     {
+      "source": "/",
+      "destination": "/learnuiux/newsletter"
+    },
+    {
+      "source": "/privacy",
+      "destination": "/learnuiux/privacy"
+    },
+    {
       "source": "/r/:path*",
       "destination": "/learnuiux/api/r/:path*"
     }
