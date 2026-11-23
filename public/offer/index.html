@@ -153,7 +153,7 @@ body{background:var(--frame);color:var(--white);font-family:var(--sans);overflow
 .offer .lab{margin:0 0 10px;font-size:24px;color:var(--dim)}
 .code{display:inline-block;padding:8px 26px;border:2px dashed var(--pixel);border-radius:12px;font-size:42px;letter-spacing:.06em;color:#fff}
 .timer{display:flex;gap:14px}
-.timer div{width:104px;text-align:center}
+.timer div{min-width:104px;text-align:center}
 .timer strong{display:block;font-family:var(--latin);font-size:60px;font-weight:500;line-height:1.05;color:#fff}
 .timer small{font-size:20px;color:var(--dim)}
 .timer.over strong{color:var(--dim)}
@@ -269,7 +269,7 @@ body:hover #hud,#hud:focus-within{opacity:1}
   .offer .lab{font-size:14px;margin-bottom:8px}
   .code{font-size:24px;padding:6px 18px}
   .timer{gap:8px;justify-content:center}
-  .timer div{width:64px}
+  .timer div{min-width:64px}
   .timer strong{font-size:36px}
   .timer small{font-size:12px}
   .buybox{margin:0;width:100%;gap:14px}
@@ -407,8 +407,8 @@ body:hover #hud,#hud:focus-within{opacity:1}
         <div class="timer" id="timer" dir="ltr"><div><strong id="tH">72</strong><small>שעות</small></div><div><strong id="tM">00</strong><small>דקות</small></div><div><strong id="tS">00</strong><small>שניות</small></div></div>
       </div>
       <div class="buybox">
-        <p class="was"><span>מחיר מלא <s><bdi>₪7,799</bdi></s></span><span>מחזור ראשון <s><bdi>₪5,600</bdi></s></span></p>
-        <a class="cta" id="buy" href="https://pay.grow.link/OTk1NDI~3a1cd4542bd5a539f97be7d56ca7795e-NDA5NTcxNA" target="_blank" rel="noopener"><span class="cta-l">להצטרפות לליווי<small>מתחילים ב־<bdi>8.11</bdi></small></span><span class="price"><bdi>₪5,040</bdi></span></a>
+        <p class="was"><span>מחיר מלא <s><bdi>₪7,490</bdi></s></span><span>מחזור ראשון <s><bdi>₪6,590</bdi></s></span></p>
+        <a class="cta" id="buy" href="https://pay.grow.link/OTk1NDI~3a1cd4542bd5a539f97be7d56ca7795e-NDA5NTcxNA" target="_blank" rel="noopener"><span class="cta-l">להצטרפות לליווי<small>מתחילים ב־<bdi>8.11</bdi></small></span><span class="price"><bdi>₪5,979</bdi></span></a>
       </div>
     </div>
   </section>
@@ -553,10 +553,10 @@ body:hover #hud,#hud:focus-within{opacity:1}
   }
 
 
-  // Offer countdown: ends Mon 26.10.2026 23:59 (Israel time, winter clock +02:00).
+  // Offer countdown: 7 days from 23.11.2026 09:40, ends Mon 30.11.2026 09:40 (Israel time, +02:00).
   // ?until=thu (one Brevo list) runs to Thu 22.10 with its own Grow coupon.
   // ?round=4 (Brevo list "שיחת יעוץ 4") runs to Mon 2.11 with coupon timeToShine4.
-  var DEADLINE=new Date("2026-10-26T23:59:00+02:00").getTime();
+  var DEADLINE=new Date("2026-11-30T09:40:00+02:00").getTime();
   var qs=new URLSearchParams(location.search);
   if(qs.get("until")==="thu"){
     DEADLINE=new Date("2026-10-22T23:59:00+03:00").getTime();
