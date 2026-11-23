@@ -2,7 +2,7 @@ import { addBuyerToList, removeBuyerFromInterested, sendPurchaseWelcome } from "
 
 /**
  * Grow webhook for the else-uiux payment link: every buyer of that product lands in Brevo
- * list 22 "else-uiux-purchased", leaves list 21 "else-uiux-interested", and
+ * list 34 "else-uiux-purchased-#2" (cohort 1 went to 22), leaves list 21 "else-uiux-interested", and
  * gets the welcome email with the WhatsApp group link.
  *
  * The Grow webhook is account-wide, so this route is also the one place that hands

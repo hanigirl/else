@@ -192,8 +192,9 @@ export async function sendConfirmation(lead: Lead, bookingUrl: string) {
   if (!res.ok) throw new Error(`Brevo email ${res.status}: ${await res.text()}`);
 }
 
-// List 22 in the UXtra account: "else-uiux-purchased".
-const PURCHASED_LIST_ID = Number(process.env.BREVO_PURCHASED_LIST_ID ?? 22);
+// List 34 in the UXtra account: "else-uiux-purchased-#2" (cohort 2, since 23.11.2026).
+// Cohort 1 buyers are in list 22 "else-uiux-purchased".
+const PURCHASED_LIST_ID = Number(process.env.BREVO_PURCHASED_LIST_ID ?? 34);
 
 export type Buyer = { email: string; name?: string; phone?: string };
 
