@@ -571,6 +571,10 @@ body:hover #hud,#hud:focus-within{opacity:1}
     DEADLINE=new Date("2026-11-06T23:59:00+02:00").getTime();
     document.getElementById("coupon").textContent="timeToShine5";
   }
+  // ?batch=2 (מחזור 2) runs 7 days, to Mon 30.11 09:40.
+  if(qs.get("batch")==="2"){
+    DEADLINE=new Date("2026-11-30T09:40:00+02:00").getTime();
+  }
   var tH=document.getElementById("tH"),tM=document.getElementById("tM"),tS=document.getElementById("tS"),tBox=document.getElementById("timer");
   function pad(n){return (n<10?"0":"")+n}
   function tickTimer(){var d=Math.max(0,Math.floor((DEADLINE-Date.now())/1000));
