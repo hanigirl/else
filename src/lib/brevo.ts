@@ -231,9 +231,10 @@ export async function removeBuyerFromInterested(email: string) {
   throw new Error(`Brevo ${res.status}: ${await res.text()}`);
 }
 
-// Template 84 "else-uiux · ברוכים הבאים (רכישה)" — source: emails/purchase.html (Figma 76:454).
+// Template 116 "else-uiux · ברוכים הבאים (רכישה) · מחזור 2" — copy of 84 (cohort 1) with the cohort-2 WhatsApp group.
+// Source: emails/purchase.html (Figma 76:454).
 // The WhatsApp group link lives in the template, so a new cohort's group is edited in Brevo.
-const PURCHASE_TEMPLATE_ID = Number(process.env.BREVO_PURCHASE_TEMPLATE_ID) || 84;
+const PURCHASE_TEMPLATE_ID = Number(process.env.BREVO_PURCHASE_TEMPLATE_ID) || 116;
 
 /** The welcome email every buyer gets, right away. */
 export async function sendPurchaseWelcome(buyer: Buyer) {
